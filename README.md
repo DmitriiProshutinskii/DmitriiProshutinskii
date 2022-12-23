@@ -10,7 +10,7 @@ Here are some ideas to get you started:
 
 - 🌱 I’m currently learning Flutter and Dart internals
 - 🤔 I’m looking for help with developing a Flutter tools
-- 🎞️ 
+- 🎞️ I love old movies
 - 📫 How to reach me: koptehe@gmail.com or @koptehe in Telegram
 - ⚡ Fun fact: Born in [Yakutsk](https://goo.gl/maps/EAvJ1nE3bbVoo4xw5)
 
