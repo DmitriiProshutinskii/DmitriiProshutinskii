@@ -15,6 +15,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: Born in [Yakutsk](https://goo.gl/maps/EAvJ1nE3bbVoo4xw5)
 
 This is my [Notion page](https://dmitrii-proshutinskii.notion.site/Dmitrii-Proshutinskii-3d9c013d2ce043f89fce377f2f5e5873) with all my information
+
 This is my [GitHub CV page](https://github.com/DmitriiProshutinskii/DmitriiProshutinskii/blob/master/CV.md) (this is duplication of Notion CV)
 
 <!--
@@ -27,7 +28,6 @@ This is my [GitHub CV page](https://github.com/DmitriiProshutinskii/DmitriiProsh
 <div>
   <img src="https://github.com/devicons/devicon/blob/master/icons/flutter/flutter-original.svg" title="Flutter" alt="Flutter" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/dart/dart-original.svg" title="Dart" alt="Dart" width="40" height="40"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/materialui/materialui-original.svg" title="Material UI" alt="Material UI" width="40" height="40"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain-wordmark.svg" title="Firebase" alt="Firebase" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/firebase/firebase-plain.svg" title="Firebase" alt="Firebase" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original-wordmark.svg" title="Git" **alt="Git" width="40" height="40"/>
 </div>
