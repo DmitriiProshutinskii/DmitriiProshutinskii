@@ -18,19 +18,9 @@ Developed an algorithm for optimizing the well trajectory and an algorithm for d
 
 # Work Experience
 
----
+### Flutter developer at Epic Charging (Freelance), *now*, Jan. 2023 — now
 
-*now*
-
-Jan. 2023 — now
-
-Los Angeles, USA (remote)
-
----
-
-[Web site](https://epiccharging.com/)
-
-### Flutter developer at Epic Charging (Freelance)
+Los Angeles, USA (remote), [Web site](https://epiccharging.com/) 
 
 Epic Charging is a hardware agnostic platform for electric fleets, start-up. Project work, upon completion of work I will be on support.
 
@@ -39,21 +29,9 @@ Epic Charging is a hardware agnostic platform for electric fleets, start-up. Pro
 - Implemented authorization (Google, Apple, Facebook) with **Firebase,** token management, localization (**l10n** or **intl** package), Google maps setup (**Google API**), autocomplete, **geolocation**
 - Made internal testing in **Test Flight** and **Google Play**
 
-*11 months*
+### Flutter developer at Konstructly LTD., *11 months*, Mar. 2022 — Jan. 2023
 
-Mar. 2022 — Jan. 2023
-
-London, UK (remote)
-
----
-
-[iOS app](https://apps.apple.com/app/id1609399047)
-
-[Android app](https://play.google.com/store/apps/details?id=com.konstructly.konstructlyapp&pli=1)
-
-[Web site](https://konstructly.com/)
-
-### Flutter developer at Konstructly LTD.
+London, UK (remote), [iOS app](https://apps.apple.com/app/id1609399047), [Android app](https://play.google.com/store/apps/details?id=com.konstructly.konstructlyapp&pli=1), [Web site](https://konstructly.com/)
 
 Konstructly is a start-up with a ~ $2 million investment. The main product is construction management software.
 
