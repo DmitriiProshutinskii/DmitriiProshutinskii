@@ -1,4 +1,4 @@
-# Dmitrii Proshutinskii
+[# Dmitrii Proshutinskii
 
 ## Flutter developer
 
@@ -7,8 +7,6 @@ koptehe@gmail.com
 +995 591 007 418
 
 [LinkedIn](https://www.linkedin.com/in/dmitrii-proshutinskii-797259191/)
-
-Tbilisi, Georgia (+4 UTC)
 
 Flutter developer with almost 2 years of **mobile** development experience and 5+ years of **tech** experience with strong math and physics background in fitness, construction, and oil and gas industries in United Kingdom and Russia.
 
@@ -193,3 +191,4 @@ Russian (native)
 English (B2)
 
 Italian (A1)
+](https://github.com/DmitriiProshutinskii/DmitriiProshutinskii/blob/master/CV.md)
