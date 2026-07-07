@@ -15,7 +15,7 @@
 - ❄️ Fun fact: born in [Yakutsk](https://goo.gl/maps/EAvJ1nE3bbVoo4xw5) — the coldest city on Earth
 - 📫 Reach me: **koptehe@gmail.com** · [@koptehe](https://t.me/koptehe) on Telegram
 
-📄 **[My CV / Notion page »](https://www.notion.so/dmitrii-proshutinskii/Dmitrii-Proshutinskii-c4df9544333b4a5a91c78701c69819d4)**
+📄 **[My CV »](https://github.com/DmitriiProshutinskii/DmitriiProshutinskii/edit/master/CV.md)**
 
 ---
 
