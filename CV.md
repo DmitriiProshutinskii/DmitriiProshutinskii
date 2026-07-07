@@ -1,5 +1,3 @@
-[# Dmitrii Proshutinskii
-
 ## Flutter developer
 
 koptehe@gmail.com
