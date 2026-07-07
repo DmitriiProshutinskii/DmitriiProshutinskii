@@ -10,8 +10,7 @@
 - 🔭 Currently working with **Flutter, Dart & Bloc/Cubit**
 - 🧩 Comfortable across the stack: Drift (SQLite), go_router, get_it/injectable, CI/CD
 - 🌱 Deepening my knowledge of **iOS / Swift** and app architecture
-- 🕺 Open to **cool companies and challenging projects** — remote or relocation
-- 🌍 Currently based in **Tbilisi, Georgia**
+- 🕺 Open to **cool companies and challenging projects** — **open to relocation**
 - 🎞️ I love old movies
 - ❄️ Fun fact: born in [Yakutsk](https://goo.gl/maps/EAvJ1nE3bbVoo4xw5) — the coldest city on Earth
 - 📫 Reach me: **koptehe@gmail.com** · [@koptehe](https://t.me/koptehe) on Telegram
@@ -42,13 +41,15 @@
 
 ### 📊 GitHub Stats
 
+<!-- Публичный инстанс vercel часто падает по rate-лимиту.
+     Для надёжности замени github-readme-stats.vercel.app на свой self-hosted домен. -->
 <div align="center">
   <img height="165" src="https://github-readme-stats.vercel.app/api?username=DmitriiProshutinskii&show_icons=true&hide_border=true&theme=default" alt="GitHub stats"/>
   <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=DmitriiProshutinskii&layout=compact&hide_border=true&langs_count=8&theme=default" alt="Top languages"/>
 </div>
 
 <div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=DmitriiProshutinskii&hide_border=true" alt="GitHub streak"/>
+  <img src="https://streak-stats.demolab.com/?user=DmitriiProshutinskii&hide_border=true" alt="GitHub streak"/>
 </div>
 
 ---
@@ -56,4 +57,6 @@
 ### 📫 Connect with me
 
 <p align="left">
-  <a href="mailto:koptehe@gmail.com"><img
+  <a href="mailto:koptehe@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a>
+  <a href="https://t.me/koptehe"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"/></a>
+</p>
