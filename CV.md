@@ -12,8 +12,6 @@
 [![Telegram](https://img.shields.io/badge/@koptehe-2857E6?style=flat-square&logo=telegram&logoColor=white)](https://t.me/koptehe)
 [![Medium](https://img.shields.io/badge/Medium-16181D?style=flat-square&logo=medium&logoColor=white)](https://koptehe.medium.com/)
 
-📍 Tbilisi, Georgia · UTC+4
-
 </div>
 
 ---
