@@ -43,10 +43,6 @@
 
 <!-- Публичный инстанс vercel часто падает по rate-лимиту.
      Для надёжности замени github-readme-stats.vercel.app на свой self-hosted домен. -->
-<div align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=DmitriiProshutinskii&show_icons=true&hide_border=true&theme=default" alt="GitHub stats"/>
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=DmitriiProshutinskii&layout=compact&hide_border=true&langs_count=8&theme=default" alt="Top languages"/>
-</div>
 
 <div align="center">
   <img src="https://streak-stats.demolab.com/?user=DmitriiProshutinskii&hide_border=true" alt="GitHub streak"/>
