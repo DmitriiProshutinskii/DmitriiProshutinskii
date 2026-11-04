@@ -12,6 +12,7 @@ import { WishPhoto } from "@/components/wish/wish-photo"
 import { PRIORITY_LABEL, byPriority, formatPrice, isTaken } from "@/lib/format"
 import type { Role, Theme, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 interface Props {
   theme: Theme
@@ -47,7 +48,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
       </div>
 
       {ideas.length > 0 && (
-        <Card className="gap-3 rounded-2xl py-4 shadow-none">
+        <Card className="gap-3 rounded-3xl py-4 shadow-none">
           <CardHeader className="px-4">
             <CardTitle>Идеи из списка</CardTitle>
           </CardHeader>
@@ -58,9 +59,9 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
                   <button
                     type="button"
                     onClick={() => onOpenWish(w.id)}
-                    className="hover:bg-muted grid w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-xl p-2 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    className="hover:bg-muted grid w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-lg p-2 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
-                    <span className={cn("bg-tile grid aspect-square place-items-center overflow-hidden rounded-xl", w.priority === 3 && "bg-hot-soft ring-hot ring-2 ring-inset")}>
+                    <span className={cn("bg-tile grid aspect-square place-items-center overflow-hidden rounded-lg", w.priority === 3 && "bg-hot-soft ring-hot ring-2 ring-inset")}>
                       <WishPhoto wish={w} className="size-[80%]" />
                     </span>
                     <span className="min-w-0 text-sm leading-tight font-semibold">
@@ -81,7 +82,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
       )}
 
       {role === "friend" ? (
-        <Card className="gap-4 rounded-2xl py-4 shadow-none">
+        <Card className="gap-4 rounded-3xl py-4 shadow-none">
           <CardHeader className="px-4">
             <CardTitle>Подарю что-то своё по теме</CardTitle>
           </CardHeader>
@@ -91,7 +92,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
             ) : (
               <p className="text-muted-foreground text-sm">Пока никто не отметился. Напиши, что даришь, чтобы другие не повторились.</p>
             )}
-            <form onSubmit={submit} className="grid gap-3">
+            <form id="pledge-form" onSubmit={submit} className="grid gap-3">
               <div className="grid gap-2">
                 <Label htmlFor="p-name">Твоё имя</Label>
                 <Input id="p-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
@@ -100,10 +101,12 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
                 <Label htmlFor="p-text">Что подаришь</Label>
                 <Input id="p-text" required maxLength={140} value={text} onChange={(e) => setText(e.target.value)} placeholder="Например, перчатки для картинга" />
               </div>
-              <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
-                Отметить
-              </Button>
-              <p className="text-muted-foreground text-center text-xs">Остальные друзья увидят, {ownerName || "владелец списка"} нет.</p>
+              <SheetFooter>
+                <Button type="submit" form="pledge-form" size="lg" className="w-full" disabled={busy}>
+                  Отметить, что дарю
+                </Button>
+              </SheetFooter>
+              <p className="text-muted-foreground text-xs">Остальные друзья увидят, {ownerName || "владелец списка"} нет.</p>
             </form>
           </CardContent>
         </Card>

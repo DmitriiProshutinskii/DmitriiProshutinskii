@@ -14,6 +14,7 @@ import { WishPhoto } from "@/components/wish/wish-photo"
 import { PRIORITY_LABEL, domainOf, formatPrice, isTaken } from "@/lib/format"
 import type { Role, Theme, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 interface Props {
   wish: Wish
@@ -37,11 +38,12 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
     <div className="grid gap-4">
       <div
         className={cn(
-          "bg-tile relative grid aspect-[4/3] place-items-center overflow-hidden rounded-3xl",
+          // Kept short so the reserve form is on screen when the sheet opens on a phone.
+          "bg-tile relative mx-auto grid aspect-[16/10] max-h-[32dvh] w-full place-items-center overflow-hidden rounded-3xl",
           hot && "bg-hot-soft ring-hot ring-2 ring-inset"
         )}
       >
-        <WishPhoto wish={wish} className="size-[62%]" />
+        <WishPhoto wish={wish} className="size-[70%]" />
         {wish.multi && (
           <Badge variant="outline" className="absolute bottom-3 left-3 border-transparent shadow-sm">
             <Layers />
@@ -51,9 +53,11 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       </div>
 
       <div className="flex flex-wrap gap-1.5">
-        <Badge variant={hot ? "hot" : "secondary"}>{PRIORITY_LABEL[wish.priority]}</Badge>
+        <Badge variant={hot ? "hot" : "secondary"} className="h-10 px-3.5 text-[13px]">
+          {PRIORITY_LABEL[wish.priority]}
+        </Badge>
         {wishThemes.map((t) => (
-          <Badge key={t.id} asChild variant="theme" className={cn(`th-${t.color}`, "cursor-pointer")}>
+          <Badge key={t.id} asChild variant="theme" className={cn(`th-${t.color}`, "h-10 cursor-pointer px-3.5 text-[13px]")}>
             <button type="button" onClick={() => onOpenTheme(t.id)}>
               {t.name}
             </button>
@@ -61,10 +65,10 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
         ))}
       </div>
 
-      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <span className="font-display text-2xl font-medium tabular-nums">{formatPrice(wish.price)}</span>
         {wish.url && (
-          <Button variant="link" asChild className="h-auto p-0 font-bold">
+          <Button variant="outline" asChild>
             <a href={wish.url} target="_blank" rel="noopener noreferrer">
               Открыть на {domain}
               <ExternalLink />
@@ -74,7 +78,7 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       </div>
 
       {wish.note && (
-        <div className="bg-muted rounded-2xl p-3.5 text-sm break-words">
+        <div className="bg-muted rounded-3xl p-4 text-sm break-words">
           <div className="text-muted-foreground mb-0.5 text-[11px] font-bold tracking-wider uppercase">
             {role === "friend" ? `Комментарий${ownerName ? ` от ${ownerName}` : ""}` : "Твой комментарий"}
           </div>
@@ -134,11 +138,12 @@ function ReserveCard({
   }
 
   let title = ""
-  if (taken) title = "Уже забронировано"
+  if (alreadyMine && !wish.multi) title = "Ты даришь это"
+  else if (taken) title = "Уже забронировано"
   else if (wish.multi) title = count ? `Уже дарят: ${count}` : "Можно подарить нескольким"
 
   return (
-    <Card className="gap-4 rounded-2xl py-4 shadow-none">
+    <Card className="gap-4 rounded-3xl py-4 shadow-none">
       {title && (
         <CardHeader className="px-4">
           <CardTitle>{title}</CardTitle>
@@ -147,7 +152,7 @@ function ReserveCard({
       <CardContent className="grid gap-4 px-4">
         <PeopleList people={people} onRemove={onUnreserve} removeLabel="Снять бронь" />
         {!taken && !alreadyMine && (
-          <form onSubmit={submit} className="grid gap-3">
+          <form id="reserve-form" onSubmit={submit} className="grid gap-3">
             <div className="grid gap-2">
               <Label htmlFor="r-name">Твоё имя</Label>
               <Input id="r-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Например, Катя" autoComplete="given-name" />
@@ -162,10 +167,13 @@ function ReserveCard({
                 placeholder={wish.multi ? "Что именно подаришь" : "Беру сам / давайте скинемся"}
               />
             </div>
-            <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
-              {wish.multi && count ? "Я тоже подарю" : "Забронировать"}
-            </Button>
-            <p className="text-muted-foreground text-center text-xs">{ownerName || "Владелец списка"} не увидит, кто и что забронировал.</p>
+            {/* Pinned to the bottom of the sheet while the form scrolls, so the main action is always in reach. */}
+            <SheetFooter>
+              <Button type="submit" form="reserve-form" size="lg" className="w-full" disabled={busy}>
+                {wish.multi && count ? "Я тоже подарю" : "Забронировать"}
+              </Button>
+            </SheetFooter>
+            <p className="text-muted-foreground text-xs">{ownerName || "Владелец списка"} не увидит, кто и что забронировал.</p>
           </form>
         )}
       </CardContent>

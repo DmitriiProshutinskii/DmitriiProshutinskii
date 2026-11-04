@@ -12,12 +12,12 @@ export function ConfirmButton({ children, question, confirmLabel, onConfirm }: {
       </Button>
     )
   return (
-    <div className="bg-muted flex flex-wrap items-center gap-2 rounded-xl p-2 pl-3 text-sm">
+    <div className="bg-muted flex flex-wrap items-center gap-2 rounded-lg p-2 pl-3 text-sm">
       <span className="mr-auto font-semibold">{question}</span>
-      <Button variant="ghost" size="sm" onClick={() => setAsking(false)}>
+      <Button variant="ghost" onClick={() => setAsking(false)}>
         Отмена
       </Button>
-      <Button variant="destructive" size="sm" onClick={onConfirm}>
+      <Button variant="destructive" onClick={onConfirm}>
         {confirmLabel}
       </Button>
     </div>

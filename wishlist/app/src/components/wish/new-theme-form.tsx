@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { COLOR_LABEL } from "@/lib/format"
 import type { ThemeColor, ThemeInput } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 export function NewThemeForm({ onSubmit }: { onSubmit: (theme: ThemeInput) => void | Promise<void> }) {
   const [name, setName] = useState("")
@@ -25,7 +26,7 @@ export function NewThemeForm({ onSubmit }: { onSubmit: (theme: ThemeInput) => vo
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-4">
+    <form id="theme-form" onSubmit={submit} className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="t-name">Название</Label>
         <Input id="t-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Например, Настолки" />
@@ -59,9 +60,11 @@ export function NewThemeForm({ onSubmit }: { onSubmit: (theme: ThemeInput) => vo
           ))}
         </RadioGroup>
       </div>
-      <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
-        Создать тематику
-      </Button>
+      <SheetFooter>
+        <Button type="submit" form="theme-form" size="lg" className="w-full" disabled={busy}>
+          Создать тематику
+        </Button>
+      </SheetFooter>
     </form>
   )
 }

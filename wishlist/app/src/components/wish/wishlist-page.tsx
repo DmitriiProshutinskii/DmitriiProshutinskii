@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react"
-import { Loader2, Settings2, Share } from "lucide-react"
+import { Check, Link2, Loader2, Pencil, Settings2 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,8 +14,9 @@ import { WishForm } from "@/components/wish/wish-form"
 import { AddWishTile, WishTile } from "@/components/wish/wish-tile"
 import type { useWishlist } from "@/hooks/use-wishlist"
 import { storage, type Backend } from "@/lib/backend"
-import { byPriority, isTaken } from "@/lib/format"
+import { byPriority, isTaken, plural } from "@/lib/format"
 import type { Role } from "@/lib/types"
+import { cn } from "@/lib/utils"
 
 type Sheet =
   | { type: "wish"; id: string }
@@ -64,6 +65,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
     let l = wishes
     if (filter === "hot") l = l.filter((w) => w.priority === 3)
     else if (filter === "multi") l = l.filter((w) => w.multi)
+    else if (filter === "mine") l = l.filter((w) => w.reservations.some((r) => r.mine))
     else if (filter.startsWith("th:")) l = l.filter((w) => w.themeIds.includes(filter.slice(3)))
     return [...l].sort(byPriority)
   }, [wishes, filter])
@@ -91,12 +93,16 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
   const friendLink = view.friendPath ? location.origin + view.friendPath : ""
   const owner = view.ownerName
   const free = wishes.filter((w) => !isTaken(w)).length
-  const filters: { value: string; label: string; count: number; dot?: boolean }[] = [
+  const filters: { value: string; label: string; count: number; dot?: boolean; check?: boolean }[] = [
     { value: "all", label: "Все", count: wishes.length },
     { value: "hot", label: "Очень хочу", count: wishes.filter((w) => w.priority === 3).length, dot: true },
     { value: "multi", label: "Можно несколько", count: wishes.filter((w) => w.multi).length },
+    ...(friend ? [{ value: "mine", label: "Мои брони", count: wishes.filter((w) => w.reservations.some((r) => r.mine)).length, check: true }] : []),
     ...themes.map((t) => ({ value: "th:" + t.id, label: t.name, count: wishes.filter((w) => w.themeIds.includes(t.id)).length })),
   ].filter((f) => f.value === "all" || f.count > 0)
+  // A filter whose chip disappeared (e.g. the last own reservation was cancelled) falls back to «Все».
+  const activeFilter = filters.some((f) => f.value === filter) ? filter : "all"
+  const shown = activeFilter === filter ? visible : [...wishes].sort(byPriority)
 
   // ----- sheet content -----
   let eyebrow = ""
@@ -225,41 +231,53 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
     <div className="min-h-dvh">
       {topBar}
 
-      <main className={`${gutter} grid gap-9 pt-7 pb-16 [&>*]:min-w-0`}>
+      <main className={`${gutter} grid gap-8 pt-6 pb-16 [&>*]:min-w-0 sm:gap-9 sm:pt-7`}>
         <header className="grid gap-3">
-          <div className="flex items-start justify-between gap-3">
-            <h1 className="font-display text-[clamp(2rem,6vw,2.9rem)] leading-[1.02] font-bold tracking-tight text-balance">{view.title}</h1>
-            {!friend && (
-              <div className="flex shrink-0 gap-2">
-                <Button variant="outline" size="icon" className="size-11 rounded-full" onClick={() => copyText(friendLink, "Ссылка для друзей скопирована")} aria-label="Скопировать ссылку для друзей">
-                  <Share className="size-5" />
-                </Button>
-                <Button variant="outline" size="icon" className="size-11 rounded-full" onClick={() => open({ type: "settings" })} aria-label="Настройки">
-                  <Settings2 className="size-5" />
-                </Button>
-              </div>
-            )}
-          </div>
+          <h1 className="font-display text-[clamp(1.75rem,7vw,2.9rem)] leading-[1.05] font-bold tracking-tight text-balance">{view.title}</h1>
           <p className="text-muted-foreground max-w-[60ch]">
             {friend
-              ? `Выбирай и бронируй, чтобы подарки не повторились. ${owner || "Владелец списка"} не узнает, кто что выбрал.${wishes.length ? ` Свободно ${free} из ${wishes.length}.` : ""}`
-              : "Твоя версия. Брони друзей скрыты, сюрприз не испортится."}
+              ? `Бронируй подарок, чтобы они не повторились. ${owner || "Владелец списка"} не узнает, кто что выбрал.`
+              : "Твоя версия. Брони друзей здесь не видны."}
           </p>
+          {!friend && (
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => copyText(friendLink, "Ссылка скопирована. Отправь её друзьям")}>
+                <Link2 />
+                Ссылка для друзей
+              </Button>
+              <Button variant="outline" onClick={() => open({ type: "settings" })}>
+                <Settings2 />
+                Настройки
+              </Button>
+            </div>
+          )}
           {(view.params.length > 0 || !friend) && (
-            <ul className="flex flex-wrap gap-2">
+            // One scrollable row on phones so the wishes stay on the first screen; wraps on wider screens.
+            <ul className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 sm:flex-wrap sm:overflow-visible" aria-label="Параметры">
               {view.params.map((p, i) => (
-                <li key={i}>
-                  <Badge variant="outline" className="gap-1.5 px-3 py-1.5 text-[13px] font-semibold whitespace-normal">
+                <li key={i} className="shrink-0 sm:shrink">
+                  <Badge variant="outline" className="h-9 gap-1.5 px-3 text-[13px] font-semibold sm:whitespace-normal">
                     <span className="text-muted-foreground font-medium">{p.label}</span>
                     {p.value}
                   </Badge>
                 </li>
               ))}
               {!friend && (
-                <li>
-                  <Badge asChild variant="outline" className="text-muted-foreground cursor-pointer border-dashed px-3 py-1.5 text-[13px] font-semibold">
+                <li className="shrink-0">
+                  <Badge
+                    asChild
+                    variant="outline"
+                    className={cn("text-muted-foreground h-9 cursor-pointer px-3 text-[13px] font-semibold", !view.params.length && "border-dashed")}
+                  >
                     <button type="button" onClick={() => open({ type: "settings" })}>
-                      {view.params.length ? "Изменить параметры" : "+ Размеры, цвета, что не дарить"}
+                      {view.params.length ? (
+                        <>
+                          <Pencil />
+                          Изменить
+                        </>
+                      ) : (
+                        "+ Размеры, цвета, что не дарить"
+                      )}
                     </button>
                   </Badge>
                 </li>
@@ -268,12 +286,46 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
           )}
         </header>
 
+        <section className="grid gap-4">
+          <div className="flex items-baseline justify-between gap-3">
+            <h2 className="font-display text-lg font-medium tracking-tight">Желания</h2>
+            {wishes.length > 0 && (
+              <p className="text-muted-foreground text-sm tabular-nums">
+                {friend ? `Свободно ${free} из ${wishes.length}` : `${wishes.length} ${plural(wishes.length, "желание", "желания", "желаний")}`}
+              </p>
+            )}
+          </div>
+          {filters.length > 1 && (
+            <div className="-mx-1 overflow-x-auto px-1 pb-1">
+              <ToggleGroup type="single" value={activeFilter} onValueChange={(v) => v && setFilter(v)} variant="outline" aria-label="Фильтр">
+                {filters.map((f) => (
+                  <ToggleGroupItem
+                    key={f.value}
+                    value={f.value}
+                    className="bg-card text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary h-11 rounded-full px-4"
+                  >
+                    {f.dot && <span className="bg-hot size-2 rounded-full" />}
+                    {f.check && <Check className="text-mine" />}
+                    {f.label}
+                    <span className="text-[13px] opacity-60">{f.count}</span>
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          )}
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-x-3.5 gap-y-6">
+            {!friend && <AddWishTile onClick={() => open({ type: "new-wish" })} />}
+            {shown.map((w) => (
+              <WishTile key={w.id} wish={w} role={role} onOpen={() => open({ type: "wish", id: w.id })} />
+            ))}
+            {friend && shown.length === 0 && <p className="text-muted-foreground col-span-full py-6">Список пока пуст. Загляни позже.</p>}
+          </div>
+        </section>
+
+        {/* Themes sit after the grid: picking a wish is the main job; the filter chips already lead to each theme. */}
         {(themes.length > 0 || !friend) && (
           <section className="grid gap-3">
-            <div className="flex items-baseline justify-between gap-3">
-              <h2 className="font-display text-lg font-medium tracking-tight">Тематики</h2>
-              <p className="text-muted-foreground text-sm">Подойдёт что угодно по теме</p>
-            </div>
+            <h2 className="font-display text-lg font-medium tracking-tight">Тематики</h2>
             <div className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-1.5">
               {themes.map((t) => (
                 <ThemeCard
@@ -288,34 +340,6 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
             </div>
           </section>
         )}
-
-        <section className="grid gap-4">
-          <h2 className="font-display text-lg font-medium tracking-tight">Желания</h2>
-          {filters.length > 1 && (
-            <div className="-mx-1 overflow-x-auto px-1 pb-1">
-              <ToggleGroup type="single" value={filter} onValueChange={(v) => v && setFilter(v)} variant="outline" aria-label="Фильтр">
-                {filters.map((f) => (
-                  <ToggleGroupItem
-                    key={f.value}
-                    value={f.value}
-                    className="bg-card text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary rounded-full px-3.5"
-                  >
-                    {f.dot && <span className="bg-hot size-2 rounded-full" />}
-                    {f.label}
-                    <span className="text-xs opacity-60">{f.count}</span>
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-          )}
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-x-3.5 gap-y-6">
-            {!friend && <AddWishTile onClick={() => open({ type: "new-wish" })} />}
-            {visible.map((w) => (
-              <WishTile key={w.id} wish={w} role={role} onOpen={() => open({ type: "wish", id: w.id })} />
-            ))}
-            {friend && visible.length === 0 && <p className="text-muted-foreground col-span-full py-6">Список пока пуст. Загляни позже.</p>}
-          </div>
-        </section>
 
         {footer}
       </main>

@@ -15,13 +15,13 @@ export function PeopleList({ people, onRemove, removeLabel }: { people: Person[]
       {people.map((p) => (
         <li key={p.id} className="grid grid-cols-[32px_1fr] items-start gap-3 text-sm">
           <Avatar>
-            <AvatarFallback className="bg-th-soft text-th">{p.by.trim().charAt(0).toUpperCase() || "?"}</AvatarFallback>
+            <AvatarFallback className={p.mine ? "bg-mine text-mine-foreground" : "bg-th-soft text-th"}>{p.by.trim().charAt(0).toUpperCase() || "?"}</AvatarFallback>
           </Avatar>
           <div className="grid min-w-0 gap-0.5">
             <span className="font-bold">{p.mine ? "Ты" : p.by}</span>
             {p.text && <span className="text-muted-foreground break-words">{p.text}</span>}
             {p.mine && (
-              <Button variant="link" size="sm" className="text-muted-foreground h-auto justify-self-start p-0" onClick={() => onRemove(p.id)}>
+              <Button variant="outline" size="sm" className="mt-1.5 h-10 justify-self-start" onClick={() => onRemove(p.id)}>
                 {removeLabel}
               </Button>
             )}

@@ -15,6 +15,7 @@ import { shrinkImage } from "@/lib/images"
 import { illustrations } from "@/lib/illustrations"
 import type { LinkPreview, Priority, Theme, Wish, WishInput } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 const pill =
   "flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-accent"
@@ -90,7 +91,7 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-4">
+    <form id="wish-form" onSubmit={submit} className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="w-url">Ссылка на товар</Label>
         <div className="flex gap-2">
@@ -104,7 +105,7 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
       </div>
 
       <div className="grid grid-cols-[88px_1fr] items-center gap-3">
-        <div className="bg-tile text-muted-foreground relative grid aspect-square place-items-center overflow-hidden rounded-2xl">
+        <div className="bg-tile text-muted-foreground relative grid aspect-square place-items-center overflow-hidden rounded-lg">
           {photo ? (
             <img src={photo} alt="" className="size-full object-cover" />
           ) : placeholderArt ? (
@@ -165,7 +166,7 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
         </RadioGroup>
       </div>
 
-      <Label htmlFor="w-multi" className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-3.5">
+      <Label htmlFor="w-multi" className="flex cursor-pointer items-center justify-between gap-4 rounded-lg border p-3.5">
         <span className="grid gap-1">
           Можно больше, чем один
           <span className="text-muted-foreground text-xs font-medium">Забронировать смогут несколько друзей</span>
@@ -196,9 +197,11 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
         <Textarea id="w-note" maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Размер, цвет, что точно не подойдёт" />
       </div>
 
-      <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy || uploading}>
-        {submitLabel}
-      </Button>
+      <SheetFooter>
+        <Button type="submit" form="wish-form" size="lg" className="w-full" disabled={busy || uploading}>
+          {submitLabel}
+        </Button>
+      </SheetFooter>
     </form>
   )
 }

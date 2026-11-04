@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { ConfirmButton } from "@/components/wish/confirm-button"
 import type { Param, Settings } from "@/lib/types"
+import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 interface Props {
   settings: Settings
@@ -45,7 +46,7 @@ export function SettingsForm({ settings, friendLink, onSave, onRotateLink, onLog
 
   return (
     <div className="grid gap-6">
-      <form onSubmit={submit} className="grid gap-4">
+      <form id="settings-form" onSubmit={submit} className="grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="grid gap-2">
             <Label htmlFor="s-title">Название списка</Label>
@@ -75,9 +76,11 @@ export function SettingsForm({ settings, friendLink, onSave, onRotateLink, onLog
           </Button>
         </fieldset>
 
-        <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
-          Сохранить
-        </Button>
+        <SheetFooter>
+          <Button type="submit" form="settings-form" size="lg" className="w-full" disabled={busy}>
+            Сохранить
+          </Button>
+        </SheetFooter>
       </form>
 
       <Separator />

@@ -41,7 +41,7 @@ export function LoginScreen({ onLogin }: { onLogin: (password: string) => Promis
               <Input id="password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={!!error} />
               {error && <p className="text-destructive text-sm font-semibold">{error}</p>}
             </div>
-            <Button type="submit" size="lg" className="rounded-xl" disabled={busy}>
+            <Button type="submit" size="lg" disabled={busy}>
               {busy && <Loader2 className="animate-spin" />}
               Войти
             </Button>

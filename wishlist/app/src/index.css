@@ -5,7 +5,7 @@
 
 /* shadcn/ui tokens (zinc base) + wishlist extras: "очень хочу" accent, photo tile, theme colours */
 :root {
-  --radius: 0.875rem;
+  --radius: 0.75rem;
   --background: oklch(0.985 0.002 286);
   --foreground: oklch(0.17 0.006 286);
   --card: oklch(1 0 0);
@@ -30,6 +30,8 @@
   --hot: oklch(0.55 0.22 8);
   --hot-foreground: oklch(1 0 0);
   --hot-soft: oklch(0.95 0.035 8);
+  --mine: oklch(0.5 0.12 155);
+  --mine-foreground: oklch(1 0 0);
 
   --th-red: oklch(0.52 0.19 28);
   --th-red-soft: oklch(0.94 0.035 28);
@@ -70,6 +72,8 @@
   --hot: oklch(0.72 0.17 8);
   --hot-foreground: oklch(0.2 0.05 8);
   --hot-soft: oklch(0.3 0.07 8);
+  --mine: oklch(0.8 0.14 155);
+  --mine-foreground: oklch(0.2 0.04 155);
 
   --th-red: oklch(0.74 0.15 28);
   --th-red-soft: oklch(0.27 0.05 28);
@@ -114,6 +118,8 @@
   --color-hot: var(--hot);
   --color-hot-foreground: var(--hot-foreground);
   --color-hot-soft: var(--hot-soft);
+  --color-mine: var(--mine);
+  --color-mine-foreground: var(--mine-foreground);
   --color-th: var(--th);
   --color-th-soft: var(--th-soft);
 }

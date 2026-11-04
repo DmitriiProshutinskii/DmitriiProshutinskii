@@ -83,7 +83,7 @@ function Demo() {
             history.replaceState(null, "", "#" + r)
           }}
         >
-          <TabsList className="rounded-full">
+          <TabsList className="h-12 rounded-full">
             <TabsTrigger value="owner" className="rounded-full">
               Моя версия
             </TabsTrigger>
