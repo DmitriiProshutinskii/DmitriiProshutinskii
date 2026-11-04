@@ -1,6 +1,8 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
+import "@fontsource-variable/manrope"
+import "@fontsource-variable/unbounded"
 import "./index.css"
 import App from "./App"
 import { initThemeSync } from "./hooks/use-theme"

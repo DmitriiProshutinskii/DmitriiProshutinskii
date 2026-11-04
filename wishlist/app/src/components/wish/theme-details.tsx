@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { ConfirmButton } from "@/components/wish/confirm-button"
 import { PeopleList } from "@/components/wish/people-list"
 import { WishPhoto } from "@/components/wish/wish-photo"
 import { PRIORITY_LABEL, byPriority, formatPrice, isTaken } from "@/lib/format"
@@ -16,29 +17,32 @@ interface Props {
   theme: Theme
   wishes: Wish[]
   role: Role
+  ownerName: string
   myName: string
   onOpenWish: (id: string) => void
-  onPledge: (name: string, text: string) => void
-  onUnpledge: (index: number) => void
+  onPledge: (name: string, text: string) => Promise<boolean>
+  onUnpledge: (pledgeId: string) => void
   onDelete: () => void
 }
 
-export function ThemeDetails({ theme, wishes, role, myName, onOpenWish, onPledge, onUnpledge, onDelete }: Props) {
+export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWish, onPledge, onUnpledge, onDelete }: Props) {
   const [name, setName] = useState(myName)
   const [text, setText] = useState("")
+  const [busy, setBusy] = useState(false)
   const ideas = wishes.filter((w) => w.themeIds.includes(theme.id)).sort(byPriority)
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || !text.trim()) return
-    onPledge(name.trim(), text.trim())
-    setText("")
+    if (!name.trim() || !text.trim() || busy) return
+    setBusy(true)
+    if (await onPledge(name.trim(), text.trim())) setText("")
+    setBusy(false)
   }
 
   return (
     <div className={cn("grid gap-4", `th-${theme.color}`)}>
       <div className={cn("bg-th-soft relative overflow-hidden rounded-3xl p-5", theme.flag && "flag-corner")}>
-        <p className="max-w-[46ch] pr-8">{theme.description}</p>
+        {theme.description && <p className="max-w-[46ch] pr-8 break-words">{theme.description}</p>}
         <p className="text-th mt-2 text-sm font-bold">Подойдёт что угодно по теме, не только идеи из списка.</p>
       </div>
 
@@ -90,16 +94,16 @@ export function ThemeDetails({ theme, wishes, role, myName, onOpenWish, onPledge
             <form onSubmit={submit} className="grid gap-3">
               <div className="grid gap-2">
                 <Label htmlFor="p-name">Твоё имя</Label>
-                <Input id="p-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} />
+                <Input id="p-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="p-text">Что подаришь</Label>
                 <Input id="p-text" required maxLength={140} value={text} onChange={(e) => setText(e.target.value)} placeholder="Например, перчатки для картинга" />
               </div>
-              <Button type="submit" size="lg" className="w-full rounded-xl">
+              <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
                 Отметить
               </Button>
-              <p className="text-muted-foreground text-center text-xs">Остальные друзья увидят, Дима нет.</p>
+              <p className="text-muted-foreground text-center text-xs">Остальные друзья увидят, {ownerName || "владелец списка"} нет.</p>
             </form>
           </CardContent>
         </Card>
@@ -107,10 +111,10 @@ export function ThemeDetails({ theme, wishes, role, myName, onOpenWish, onPledge
         <>
           <Separator />
           <p className="text-muted-foreground text-sm">Друзья могут отметить, что дарят что-то своё по этой теме. Тебе эти отметки не видны.</p>
-          <Button variant="ghost" className="text-destructive hover:text-destructive justify-self-start" onClick={onDelete}>
+          <ConfirmButton question="Удалить тематику? Желания останутся." confirmLabel="Удалить" onConfirm={onDelete}>
             <Trash2 />
             Удалить тематику
-          </Button>
+          </ConfirmButton>
         </>
       )}
     </div>

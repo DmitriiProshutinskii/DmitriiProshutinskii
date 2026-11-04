@@ -10,6 +10,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={dark ? "dark" : "light"}
       className="toaster group"
       position="bottom-center"
+      visibleToasts={1}
       style={
         {
           "--normal-bg": "var(--primary)",

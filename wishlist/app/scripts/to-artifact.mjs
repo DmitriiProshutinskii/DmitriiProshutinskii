@@ -7,5 +7,6 @@ const out = src
   .replace(/<\/?head>/gi, "")
   .replace(/<\/?body>/gi, "")
   .replace(/<meta name="viewport"[^>]*>/i, "")
+  .replace(/<title>[^<]*<\/title>/, "<title>Вишлист Димы</title>")
 writeFileSync("dist-artifact/wishlist.html", out.trim() + "\n")
 console.log("dist-artifact/wishlist.html", (out.length / 1024).toFixed(0) + " KB")

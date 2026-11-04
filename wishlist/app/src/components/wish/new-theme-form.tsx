@@ -6,18 +6,22 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { COLOR_LABEL } from "@/lib/format"
-import type { Theme, ThemeColor } from "@/lib/types"
+import type { ThemeColor, ThemeInput } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
-export function NewThemeForm({ onSubmit }: { onSubmit: (theme: Omit<Theme, "id" | "pledges">) => void }) {
+export function NewThemeForm({ onSubmit }: { onSubmit: (theme: ThemeInput) => void | Promise<void> }) {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [color, setColor] = useState<ThemeColor>("green")
 
-  const submit = (e: FormEvent) => {
+  const [busy, setBusy] = useState(false)
+
+  const submit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) return
-    onSubmit({ name: name.trim(), description: description.trim() || "Что угодно по теме.", color })
+    if (!name.trim() || busy) return
+    setBusy(true)
+    await onSubmit({ name: name.trim(), description: description.trim(), color })
+    setBusy(false)
   }
 
   return (
@@ -55,7 +59,7 @@ export function NewThemeForm({ onSubmit }: { onSubmit: (theme: Omit<Theme, "id" 
           ))}
         </RadioGroup>
       </div>
-      <Button type="submit" size="lg" className="w-full rounded-xl">
+      <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
         Создать тематику
       </Button>
     </form>

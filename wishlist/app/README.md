@@ -2,26 +2,38 @@
 
 Список желаний с двумя версиями:
 
-- **моя** — добавлять и удалять желания и тематики; брони друзей не видны;
-- **для друзей** — смотреть, бронировать, писать комментарии, отмечать «дарю что-то своё по теме».
+- **моя** (`/`, вход по паролю): добавлять, менять и удалять желания и тематики, задавать параметры. Брони друзей не видны;
+- **для друзей** (`/f/<секрет>`): смотреть, бронировать, оставлять комментарии, отмечать «дарю что-то своё по теме».
 
-Сейчас это кликабельный макет: данные — примеры из `src/lib/seed.ts`, хранятся только в памяти страницы.
+Как развернуть на своём сервере: [DEPLOY.md](DEPLOY.md).
 
 ## Стек
 
-React 19 · Vite · Tailwind CSS 4 · [shadcn/ui](https://ui.shadcn.com) (компоненты в `src/components/ui`, конфиг в `components.json`) · Radix · vaul · sonner · lucide.
+- Клиент: React 19 · Vite · Tailwind CSS 4 · [shadcn/ui](https://ui.shadcn.com) (компоненты в `src/components/ui`, конфиг в `components.json`) · Radix · vaul · sonner · lucide. Шрифты Manrope и Unbounded раздаются с собственного сервера.
+- Сервер: Node 22 · Hono. Данные в одном JSON-файле, фото на диске. Собирается в один файл `dist-server/index.mjs`.
+- Запуск: Docker + Caddy (HTTPS).
 
-## Команды
+## Разработка
 
 ```bash
 npm install
-npm run dev             # локальный сервер
-npm run build           # обычная сборка в dist/
-npm run build:artifact  # один HTML-файл в dist-artifact/ для быстрого показа
+npm run dev                  # интерфейс с горячей перезагрузкой (запросы к API нужен сервер, см. ниже)
+npm run build && npm run build:server
+OWNER_PASSWORD=dev-password INSECURE_COOKIES=1 npm start   # http://localhost:3000
 ```
+
+Переменные сервера: `OWNER_PASSWORD` (обязательно, от 8 символов), `DATA_DIR` (по умолчанию `./data`),
+`STATIC_DIR` (`./dist`), `PORT` (`3000`), `INSECURE_COOKIES=1` — только для локальной работы без HTTPS.
+
+Другие команды:
+
+- `npm run build:artifact` — кликабельный макет одним HTML-файлом (данные в памяти, переключатель «моя / для друзей»);
+- `npm run check:contrast` — проверка контраста текста (WCAG AA) в светлой и тёмной теме, нужен Playwright.
 
 ## Структура
 
-- `src/App.tsx` — экран, фильтры, переключение версий, шторка с деталями
-- `src/components/wish/` — плитка желания, карточка тематики, детали, формы
-- `src/lib/types.ts` — модель данных (желание, тематика, бронь)
+- `src/App.tsx` — выбор режима: макет, моя версия, версия для друзей
+- `src/components/wish/` — экран списка, плитки, детали, формы, настройки, вход
+- `src/lib/backend.ts` — клиент API; `src/lib/demo-backend.ts` — то же в памяти для макета
+- `src/lib/types.ts` — модель данных, общая для клиента и сервера
+- `server/` — API, хранение, загрузка фото, подтягивание данных по ссылке на товар

@@ -3,9 +3,10 @@ export type Priority = 1 | 2 | 3
 export type ThemeColor = "red" | "brown" | "blue" | "green"
 
 export interface Reservation {
+  id: string
   by: string
   note: string
-  /** In the mockup: made by the current visitor, so they can cancel it. */
+  /** Made by the current visitor, so they can cancel it. */
   mine: boolean
 }
 
@@ -18,15 +19,17 @@ export interface Wish {
   /** «Можно больше, чем один» — several friends can reserve it. */
   multi: boolean
   themeIds: string[]
-  note?: string
-  /** Uploaded photo (data URL). */
-  photo?: string | null
-  /** Placeholder drawing used until real photos are fetched from the shop link. */
+  note: string
+  /** Photo URL: uploaded file, image fetched from the shop page, or a data URL in the demo. */
+  photo: string | null
+  /** Placeholder drawing used by the demo data. */
   illustration?: string | null
+  /** Friend view only. The owner's API never returns reservations. */
   reservations: Reservation[]
 }
 
 export interface Pledge {
+  id: string
   by: string
   text: string
   mine: boolean
@@ -38,7 +41,7 @@ export interface Theme {
   description: string
   color: ThemeColor
   flag?: boolean
-  /** Friends' notes like «дарю кепку McLaren». Never shown to the owner. */
+  /** Friends' notes like «дарю кепку McLaren». Friend view only. */
   pledges: Pledge[]
 }
 
@@ -46,3 +49,32 @@ export interface Param {
   label: string
   value: string
 }
+
+/** What the page renders, for either role. */
+export interface WishlistView {
+  title: string
+  /** How friends see the owner named in hints, e.g. «Дима не узнает». */
+  ownerName: string
+  params: Param[]
+  themes: Theme[]
+  wishes: Wish[]
+  /** Owner view only: path of the friends' link, e.g. /f/abc123. */
+  friendPath?: string
+}
+
+export type WishInput = Pick<Wish, "title" | "url" | "price" | "priority" | "multi" | "themeIds" | "note" | "photo">
+export type ThemeInput = Pick<Theme, "name" | "description" | "color">
+
+export interface Settings {
+  title: string
+  ownerName: string
+  params: Param[]
+}
+
+export interface LinkPreview {
+  title?: string
+  price?: number
+  photo?: string
+}
+
+export const COLORS: ThemeColor[] = ["red", "brown", "blue", "green"]

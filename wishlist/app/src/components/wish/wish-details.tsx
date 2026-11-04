@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { ExternalLink, Layers, Trash2 } from "lucide-react"
+import { ExternalLink, Layers, Pencil, Trash2 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { ConfirmButton } from "@/components/wish/confirm-button"
 import { PeopleList } from "@/components/wish/people-list"
 import { WishPhoto } from "@/components/wish/wish-photo"
 import { PRIORITY_LABEL, domainOf, formatPrice, isTaken } from "@/lib/format"
@@ -18,14 +19,16 @@ interface Props {
   wish: Wish
   themes: Theme[]
   role: Role
+  ownerName: string
   myName: string
   onOpenTheme: (id: string) => void
-  onReserve: (name: string, note: string) => void
-  onUnreserve: (index: number) => void
+  onReserve: (name: string, note: string) => Promise<boolean>
+  onUnreserve: (reservationId: string) => void
+  onEdit: () => void
   onDelete: () => void
 }
 
-export function WishDetails({ wish, themes, role, myName, onOpenTheme, onReserve, onUnreserve, onDelete }: Props) {
+export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme, onReserve, onUnreserve, onEdit, onDelete }: Props) {
   const hot = wish.priority === 3
   const domain = domainOf(wish.url)
   const wishThemes = wish.themeIds.map((id) => themes.find((t) => t.id === id)).filter((t): t is Theme => !!t)
@@ -71,22 +74,30 @@ export function WishDetails({ wish, themes, role, myName, onOpenTheme, onReserve
       </div>
 
       {wish.note && (
-        <div className="bg-muted rounded-2xl p-3.5 text-sm">
-          <div className="text-muted-foreground mb-0.5 text-[11px] font-bold tracking-wider uppercase">Комментарий Димы</div>
+        <div className="bg-muted rounded-2xl p-3.5 text-sm break-words">
+          <div className="text-muted-foreground mb-0.5 text-[11px] font-bold tracking-wider uppercase">
+            {role === "friend" ? `Комментарий${ownerName ? ` от ${ownerName}` : ""}` : "Твой комментарий"}
+          </div>
           {wish.note}
         </div>
       )}
 
       {role === "friend" ? (
-        <ReserveCard wish={wish} myName={myName} onReserve={onReserve} onUnreserve={onUnreserve} />
+        <ReserveCard key={wish.id} wish={wish} ownerName={ownerName} myName={myName} onReserve={onReserve} onUnreserve={onUnreserve} />
       ) : (
         <>
           <Separator />
           <p className="text-muted-foreground text-sm">Брони друзей здесь не показываются, сюрприз останется сюрпризом.</p>
-          <Button variant="ghost" className="text-destructive hover:text-destructive justify-self-start" onClick={onDelete}>
-            <Trash2 />
-            Удалить желание
-          </Button>
+          <div className="grid gap-2">
+            <Button variant="outline" className="justify-self-start" onClick={onEdit}>
+              <Pencil />
+              Изменить
+            </Button>
+            <ConfirmButton question="Удалить это желание?" confirmLabel="Удалить" onConfirm={onDelete}>
+              <Trash2 />
+              Удалить желание
+            </ConfirmButton>
+          </div>
         </>
       )}
     </div>
@@ -95,27 +106,31 @@ export function WishDetails({ wish, themes, role, myName, onOpenTheme, onReserve
 
 function ReserveCard({
   wish,
+  ownerName,
   myName,
   onReserve,
   onUnreserve,
 }: {
   wish: Wish
+  ownerName: string
   myName: string
-  onReserve: (name: string, note: string) => void
-  onUnreserve: (index: number) => void
+  onReserve: (name: string, note: string) => Promise<boolean>
+  onUnreserve: (id: string) => void
 }) {
   const [name, setName] = useState(myName)
   const [note, setNote] = useState("")
+  const [busy, setBusy] = useState(false)
   const taken = isTaken(wish)
   const alreadyMine = wish.reservations.some((r) => r.mine)
-  const people = wish.reservations.map((r) => ({ by: r.by, text: r.note, mine: r.mine }))
+  const people = wish.reservations.map((r) => ({ id: r.id, by: r.by, text: r.note, mine: r.mine }))
   const count = wish.reservations.length
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!name.trim()) return
-    onReserve(name.trim(), note.trim())
-    setNote("")
+    if (!name.trim() || busy) return
+    setBusy(true)
+    if (await onReserve(name.trim(), note.trim())) setNote("")
+    setBusy(false)
   }
 
   let title = ""
@@ -135,7 +150,7 @@ function ReserveCard({
           <form onSubmit={submit} className="grid gap-3">
             <div className="grid gap-2">
               <Label htmlFor="r-name">Твоё имя</Label>
-              <Input id="r-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Например, Катя" />
+              <Input id="r-name" required maxLength={40} value={name} onChange={(e) => setName(e.target.value)} placeholder="Например, Катя" autoComplete="given-name" />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="r-note">Комментарий для других друзей</Label>
@@ -147,10 +162,10 @@ function ReserveCard({
                 placeholder={wish.multi ? "Что именно подаришь" : "Беру сам / давайте скинемся"}
               />
             </div>
-            <Button type="submit" size="lg" className="w-full rounded-xl">
+            <Button type="submit" size="lg" className="w-full rounded-xl" disabled={busy}>
               {wish.multi && count ? "Я тоже подарю" : "Забронировать"}
             </Button>
-            <p className="text-muted-foreground text-center text-xs">Дима не увидит, кто и что забронировал.</p>
+            <p className="text-muted-foreground text-center text-xs">{ownerName || "Владелец списка"} не увидит, кто и что забронировал.</p>
           </form>
         )}
       </CardContent>
