@@ -7,7 +7,7 @@ import type { Role, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const tileButton =
-  "group flex min-w-0 flex-col gap-2 rounded-3xl text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+  "group text-foreground flex min-w-0 flex-col gap-2 rounded-3xl text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
 export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpen: () => void }) {
   const hot = wish.priority === 3

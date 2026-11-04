@@ -246,7 +246,7 @@ export default function App() {
                 <ToggleGroupItem
                   key={f.value}
                   value={f.value}
-                  className="bg-card data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary rounded-full px-3.5"
+                  className="bg-card text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary rounded-full px-3.5"
                 >
                   {f.dot && <span className="bg-hot size-2 rounded-full" />}
                   {f.label}
