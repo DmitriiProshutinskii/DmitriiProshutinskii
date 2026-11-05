@@ -1,4 +1,4 @@
-import type { Priority, ThemeColor, Wish } from "./types"
+import type { Currency, Priority, ThemeColor, Wish } from "./types"
 
 export const PRIORITY_LABEL: Record<Priority, string> = {
   3: "Очень хочу",
@@ -13,8 +13,15 @@ export const COLOR_LABEL: Record<ThemeColor, string> = {
   green: "Зелёный",
 }
 
-const rub = new Intl.NumberFormat("ru-RU")
-export const formatPrice = (n: number | null) => (n === null ? "Цена не указана" : `${rub.format(n)} ₽`)
+export const CURRENCY_SIGN: Record<Currency, string> = { RUB: "₽", USD: "$", EUR: "€" }
+
+/** «919 ₽», «140 $», «299,99 $» — Russian formatting, kopecks/cents only when there are any. */
+export const formatPrice = (n: number | null, currency: Currency = "RUB") => {
+  if (n === null) return "Цена не указана"
+  const digits = Number.isInteger(n) ? 0 : 2
+  const num = new Intl.NumberFormat("ru-RU", { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n)
+  return `${num} ${CURRENCY_SIGN[currency]}`
+}
 
 export const domainOf = (url: string) => {
   try {

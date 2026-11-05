@@ -69,7 +69,7 @@ for (const scheme of ["light", "dark"]) {
     // main screen, then an open wish and an open theme (dialog content)
     const views = [
       ["page", null],
-      ["wish", /Зерновой кофе/],
+      ["wish", /Кофе Tasty Coffee/],
       ["theme", /Картинг и F1/],
     ]
     for (const [name, button] of views) {

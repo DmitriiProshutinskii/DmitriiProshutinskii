@@ -72,7 +72,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
                         {w.multi && " · можно несколько"}
                       </span>
                     </span>
-                    <span className="text-sm font-extrabold whitespace-nowrap tabular-nums">{formatPrice(w.price)}</span>
+                    <span className="text-sm font-extrabold whitespace-nowrap tabular-nums">{formatPrice(w.price, w.currency)}</span>
                   </button>
                 </li>
               ))}

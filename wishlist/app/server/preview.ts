@@ -87,10 +87,12 @@ export async function readPreview(link: string) {
   const title = meta(html, ["og:title", "twitter:title"]) ?? html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]
   const image = meta(html, ["og:image", "og:image:url", "twitter:image", "image"])
   const priceRaw = meta(html, ["product:price:amount", "og:price:amount", "price"])
-  const price = priceRaw ? Math.round(Number(priceRaw.replace(/[^\d.,]/g, "").replace(",", "."))) : undefined
+  const price = priceRaw ? Math.round(Number(priceRaw.replace(/[^\d.,]/g, "").replace(",", ".")) * 100) / 100 : undefined
+  const cur = meta(html, ["product:price:currency", "og:price:currency", "priceCurrency"])?.toUpperCase()
   return {
     title: title ? decode(title).slice(0, 120) : undefined,
     image: image ? new URL(image, page.url).toString() : undefined,
     price: price && Number.isFinite(price) && price > 0 ? price : undefined,
+    currency: cur === "RUB" || cur === "USD" || cur === "EUR" ? cur : undefined,
   }
 }

@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto"
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 
-import type { Param, Priority, ThemeColor } from "../src/lib/types"
+import type { Currency, Param, Priority, ThemeColor } from "../src/lib/types"
 
 export interface StoredReservation {
   id: string
@@ -25,6 +25,7 @@ export interface StoredWish {
   title: string
   url: string
   price: number | null
+  currency?: Currency
   priority: Priority
   multi: boolean
   themeIds: string[]

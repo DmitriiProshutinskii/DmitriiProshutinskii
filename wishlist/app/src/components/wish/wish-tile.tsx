@@ -67,7 +67,7 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
           <span className="text-muted-foreground text-[13px] font-medium">Цена не указана</span>
         ) : (
           <span className={cn("text-[15px] font-bold tabular-nums", takenByOther && "text-muted-foreground")}>
-            {formatPrice(wish.price)}
+            {formatPrice(wish.price, wish.currency)}
           </span>
         )}
         {domain && <span className="text-muted-foreground truncate text-[13px]">{domain}</span>}

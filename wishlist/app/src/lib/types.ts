@@ -1,6 +1,8 @@
 export type Role = "owner" | "friend"
 export type Priority = 1 | 2 | 3
 export type ThemeColor = "red" | "brown" | "blue" | "green"
+export type Currency = "RUB" | "USD" | "EUR"
+export const CURRENCIES: Currency[] = ["RUB", "USD", "EUR"]
 
 export interface Reservation {
   id: string
@@ -15,6 +17,8 @@ export interface Wish {
   title: string
   url: string
   price: number | null
+  /** Missing means roubles (older data). */
+  currency?: Currency
   priority: Priority
   /** «Можно больше, чем один» — several friends can reserve it. */
   multi: boolean
@@ -62,7 +66,7 @@ export interface WishlistView {
   friendPath?: string
 }
 
-export type WishInput = Pick<Wish, "title" | "url" | "price" | "priority" | "multi" | "themeIds" | "note" | "photo">
+export type WishInput = Pick<Wish, "title" | "url" | "price" | "currency" | "priority" | "multi" | "themeIds" | "note" | "photo">
 export type ThemeInput = Pick<Theme, "name" | "description" | "color">
 
 export interface Settings {
@@ -74,6 +78,7 @@ export interface Settings {
 export interface LinkPreview {
   title?: string
   price?: number
+  currency?: Currency
   photo?: string
 }
 

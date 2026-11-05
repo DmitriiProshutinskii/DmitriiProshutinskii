@@ -8,7 +8,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 import { createMiddleware } from "hono/factory"
 import { secureHeaders } from "hono/secure-headers"
 
-import { COLORS, type Param, type Priority, type ThemeColor, type WishlistView } from "../src/lib/types"
+import { COLORS, CURRENCIES, type Currency, type Param, type Priority, type ThemeColor, type WishlistView } from "../src/lib/types"
 import { MAX_IMAGE_BYTES, removeImage, saveImage } from "./images"
 import { readPreview, safeFetch } from "./preview"
 import { sendFile } from "./static"
@@ -65,8 +65,9 @@ const price = (v: unknown) => {
   if (v === null || v === undefined || v === "") return null
   const n = Number(v)
   if (!Number.isFinite(n) || n < 0 || n > 100_000_000) throw new HttpError(422, "invalid_price")
-  return Math.round(n)
+  return Math.round(n * 100) / 100
 }
+const currency = (v: unknown): Currency => (CURRENCIES.includes(v as Currency) ? (v as Currency) : "RUB")
 const priority = (v: unknown): Priority => {
   if (v === 1 || v === 2 || v === 3) return v
   throw new HttpError(422, "invalid_priority")
@@ -82,6 +83,7 @@ function wishFromBody(b: Record<string, unknown>, db: Db) {
     title: str(b.title, 120, "title", true),
     url: url(b.url, "url"),
     price: price(b.price),
+    currency: currency(b.currency),
     priority: priority(b.priority),
     multi: b.multi === true,
     themeIds: [...new Set(themeIds)].filter((id) => db.themes.some((t) => t.id === id)),
@@ -336,7 +338,7 @@ export function createApp(cfg: Config) {
       const img = await safeFetch(p.image, MAX_IMAGE_BYTES, "image/*").catch(() => null)
       if (img && img.body.length < MAX_IMAGE_BYTES) photo = await saveImage(dataDir, img.body).catch(() => undefined)
     }
-    return c.json({ title: p.title, price: p.price, photo })
+    return c.json({ title: p.title, price: p.price, currency: p.currency, photo })
   })
 
   // ---------- friends ----------

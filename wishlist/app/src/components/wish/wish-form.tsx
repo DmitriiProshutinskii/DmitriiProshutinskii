@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { errorText } from "@/lib/backend"
-import { PRIORITY_LABEL } from "@/lib/format"
+import { CURRENCY_SIGN, PRIORITY_LABEL } from "@/lib/format"
 import { shrinkImage } from "@/lib/images"
 import { illustrations } from "@/lib/illustrations"
-import type { LinkPreview, Priority, Theme, Wish, WishInput } from "@/lib/types"
+import { CURRENCIES, type Currency, type LinkPreview, type Priority, type Theme, type Wish, type WishInput } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { SheetFooter } from "@/components/wish/responsive-sheet"
 
@@ -34,6 +35,7 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
   const [title, setTitle] = useState(initial?.title ?? "")
   const [url, setUrl] = useState(initial?.url ?? "")
   const [price, setPrice] = useState(initial?.price != null ? String(initial.price) : "")
+  const [currency, setCurrency] = useState<Currency>(initial?.currency ?? "RUB")
   const [priority, setPriority] = useState<Priority>(initial?.priority ?? 2)
   const [multi, setMulti] = useState(initial?.multi ?? false)
   const [themeIds, setThemeIds] = useState<string[]>(initial?.themeIds ?? [])
@@ -62,7 +64,10 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
     try {
       const p = await onPreview(url.trim())
       if (p.title && !title.trim()) setTitle(p.title)
-      if (p.price && !price) setPrice(String(p.price))
+      if (p.price && !price) {
+        setPrice(String(p.price))
+        if (p.currency) setCurrency(p.currency)
+      }
       if (p.photo && !photo) setPhoto(p.photo)
       const got = [p.title && "название", p.price && "цену", p.photo && "фото"].filter(Boolean)
       if (got.length) toast(`Подтянули ${got.join(", ")}`)
@@ -81,6 +86,7 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
       title: title.trim(),
       url: url.trim(),
       price: price === "" ? null : Number(price),
+      currency,
       priority,
       multi,
       themeIds,
@@ -139,14 +145,23 @@ export function WishForm({ themes, initial, submitLabel, onUpload, onPreview, on
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-[1fr_140px]">
+      <div className="grid gap-4 sm:grid-cols-[1fr_250px]">
         <div className="grid gap-2">
           <Label htmlFor="w-title">Название</Label>
           <Input id="w-title" required maxLength={120} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Что хочется" />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="w-price">Цена, ₽</Label>
-          <Input id="w-price" type="number" min={0} step={1} inputMode="numeric" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <Label htmlFor="w-price">Цена</Label>
+          <div className="flex gap-2">
+            <Input id="w-price" type="number" min={0} step="0.01" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} className="min-w-0" />
+            <ToggleGroup type="single" variant="outline" value={currency} onValueChange={(v) => v && setCurrency(v as Currency)} aria-label="Валюта" className="gap-1">
+              {CURRENCIES.map((c) => (
+                <ToggleGroupItem key={c} value={c} aria-label={c} className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground h-10 min-w-10 px-0">
+                  {CURRENCY_SIGN[c]}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
         </div>
       </div>
 
