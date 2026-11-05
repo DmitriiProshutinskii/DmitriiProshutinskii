@@ -42,13 +42,13 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
 
   return (
     <div className={cn("grid gap-4", `th-${theme.color}`)}>
-      <div className={cn("bg-th-soft relative overflow-hidden rounded-3xl p-5", theme.flag && "flag-corner")}>
+      <div className={cn("bg-th-soft relative overflow-hidden rounded-2xl p-5", theme.flag && "flag-corner")}>
         {theme.description && <p className="max-w-[46ch] pr-8 break-words">{theme.description}</p>}
         <p className="text-th mt-2 text-sm font-bold">Подойдёт что угодно по теме, не только идеи из списка.</p>
       </div>
 
       {ideas.length > 0 && (
-        <Card className="gap-3 rounded-3xl py-4 shadow-none">
+        <Card className="gap-3 rounded-2xl py-4 shadow-none">
           <CardHeader className="px-4">
             <CardTitle>Идеи из списка</CardTitle>
           </CardHeader>
@@ -61,7 +61,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
                     onClick={() => onOpenWish(w.id)}
                     className="hover:bg-muted grid w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-lg p-2 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
-                    <span className={cn("bg-tile grid aspect-square place-items-center overflow-hidden rounded-lg", w.priority === 3 && "bg-hot-soft ring-hot ring-2 ring-inset")}>
+                    <span className={cn("bg-tile relative grid aspect-square place-items-center overflow-hidden rounded-lg after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-['']", w.priority === 3 && "bg-hot-soft after:ring-2 after:ring-inset after:ring-hot", w.photo && "bg-white")}>
                       <WishPhoto wish={w} className="size-[80%]" />
                     </span>
                     <span className="min-w-0 text-sm leading-tight font-semibold">
@@ -82,7 +82,7 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
       )}
 
       {role === "friend" ? (
-        <Card className="gap-4 rounded-3xl py-4 shadow-none">
+        <Card className="gap-4 rounded-2xl py-4 shadow-none">
           <CardHeader className="px-4">
             <CardTitle>Подарю что-то своё по теме</CardTitle>
           </CardHeader>

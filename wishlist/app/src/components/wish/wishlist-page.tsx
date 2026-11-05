@@ -233,7 +233,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
 
       <main className={`${gutter} grid gap-8 pt-6 pb-16 [&>*]:min-w-0 sm:gap-9 sm:pt-7`}>
         <header className="grid gap-3">
-          <h1 className="font-display text-[clamp(1.75rem,7vw,2.9rem)] leading-[1.05] font-bold tracking-tight text-balance">{view.title}</h1>
+          <h1 className="font-display text-[clamp(1.75rem,7vw,2.9rem)] leading-[1.05] font-bold tracking-tighter text-balance">{view.title}</h1>
           <p className="text-muted-foreground max-w-[60ch]">
             {friend
               ? `Бронируй подарок, чтобы они не повторились. ${owner || "Владелец списка"} не узнает, кто что выбрал.`
@@ -302,7 +302,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
                   <ToggleGroupItem
                     key={f.value}
                     value={f.value}
-                    className="bg-card text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary h-11 rounded-full px-4"
+                    className="bg-card text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground data-[state=on]:border-primary h-11 rounded-lg px-4"
                   >
                     {f.dot && <span className="bg-hot size-2 rounded-full" />}
                     {f.check && <Check className="text-mine" />}

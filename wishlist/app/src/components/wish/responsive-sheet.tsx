@@ -35,7 +35,7 @@ export function ResponsiveSheet({ open, onOpenChange, eyebrow, title, children }
   if (desktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="flex max-h-[90dvh] flex-col gap-0 overflow-hidden rounded-3xl p-0 sm:max-w-[540px]">
+        <DialogContent className="flex max-h-[90dvh] flex-col gap-0 overflow-hidden rounded-2xl p-0 sm:max-w-[540px]">
           <DialogHeader className="px-5 pt-5 pr-14 pb-4 text-left">
             <DialogDescription className={eyebrowCls}>{eyebrow}</DialogDescription>
             <DialogTitle className={titleCls}>{title}</DialogTitle>

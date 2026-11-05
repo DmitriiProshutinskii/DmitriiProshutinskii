@@ -7,7 +7,7 @@ import type { Role, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const tileButton =
-  "group text-foreground flex min-w-0 flex-col gap-2 rounded-3xl text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+  "group text-foreground flex min-w-0 flex-col gap-2 rounded-2xl text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
 export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpen: () => void }) {
   const friend = role === "friend"
@@ -26,9 +26,10 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
     <button type="button" onClick={onOpen} className={tileButton}>
       <div
         className={cn(
-          "bg-tile relative grid aspect-square place-items-center overflow-hidden rounded-3xl transition group-hover:brightness-[.97]",
-          hot && "bg-hot-soft ring-hot ring-2 ring-inset",
-          mine && "ring-mine ring-[3px] ring-inset"
+          "bg-tile relative grid aspect-square place-items-center overflow-hidden rounded-2xl transition group-hover:brightness-[.97] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-['']",
+          hot && "bg-hot-soft after:ring-2 after:ring-inset after:ring-hot",
+          wish.photo && "bg-white",
+          mine && "after:ring-mine after:ring-[3px] after:ring-inset"
         )}
       >
         <WishPhoto wish={wish} className={cn(takenByOther && "opacity-50 grayscale")} />
@@ -62,9 +63,13 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
         {wish.title}
       </div>
       <div className="grid gap-0.5 px-1">
-        <span className={cn("font-display text-[15px] font-medium tabular-nums", takenByOther && "text-muted-foreground")}>
-          {formatPrice(wish.price)}
-        </span>
+        {wish.price === null ? (
+          <span className="text-muted-foreground text-[13px] font-medium">Цена не указана</span>
+        ) : (
+          <span className={cn("text-[15px] font-bold tabular-nums", takenByOther && "text-muted-foreground")}>
+            {formatPrice(wish.price)}
+          </span>
+        )}
         {domain && <span className="text-muted-foreground truncate text-[13px]">{domain}</span>}
       </div>
     </button>
@@ -74,9 +79,9 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
 export function AddWishTile({ onClick }: { onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className={tileButton}>
-      <div className="border-border grid aspect-square place-items-center rounded-3xl border-2 border-dashed transition group-hover:bg-muted/50">
+      <div className="border-border grid aspect-square place-items-center rounded-2xl border-2 border-dashed transition group-hover:bg-muted/50">
         <div className="grid justify-items-center gap-2.5 font-semibold">
-          <span className="bg-muted grid size-12 place-items-center rounded-full">
+          <span className="bg-muted grid size-12 place-items-center rounded-lg">
             <Plus className="size-5" />
           </span>
           Добавить желание

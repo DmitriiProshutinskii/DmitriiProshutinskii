@@ -9,7 +9,7 @@
 
 ## Стек
 
-- Клиент: React 19 · Vite · Tailwind CSS 4 · [shadcn/ui](https://ui.shadcn.com) (компоненты в `src/components/ui`, конфиг в `components.json`) · Radix · vaul · sonner · lucide. Шрифты Manrope и Unbounded раздаются с собственного сервера.
+- Клиент: React 19 · Vite · Tailwind CSS 4 · [shadcn/ui](https://ui.shadcn.com) (компоненты в `src/components/ui`, конфиг в `components.json`) · Radix · vaul · sonner · lucide. Шрифт Geist раздаётся с собственного сервера.
 - Сервер: Node 22 · Hono. Данные в одном JSON-файле, фото на диске. Собирается в один файл `dist-server/index.mjs`.
 - Запуск: Docker + Caddy (HTTPS).
 
@@ -28,6 +28,7 @@ OWNER_PASSWORD=dev-password INSECURE_COOKIES=1 npm start   # http://localhost:30
 Другие команды:
 
 - `npm run build:artifact` — кликабельный макет одним HTML-файлом (данные в памяти, переключатель «моя / для друзей»);
+  фото товаров для макета лежат в `src/assets/demo-photos/` и в git не попадают (это снимки магазинов); без них макет показывает рисунки;
 - `npm run check:contrast` — проверка контраста текста (WCAG AA) в светлой и тёмной теме, нужен Playwright.
 
 ## Структура

@@ -5,7 +5,7 @@ import type { Role, Theme } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const card =
-  "text-foreground relative flex min-h-[124px] w-[min(72vw,240px)] shrink-0 snap-start flex-col gap-1.5 overflow-hidden rounded-3xl p-4 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+  "text-foreground relative flex min-h-[124px] w-[min(72vw,240px)] shrink-0 snap-start flex-col gap-1.5 overflow-hidden rounded-2xl p-4 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
 export function ThemeCard({ theme, ideas, role, onOpen }: { theme: Theme; ideas: number; role: Role; onOpen: () => void }) {
   const mine = role === "friend" && theme.pledges.some((p) => p.mine)
@@ -30,7 +30,7 @@ export function AddThemeCard({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       className={cn(card, "border-border text-muted-foreground items-center justify-center border-2 border-dashed text-center font-semibold hover:bg-muted/50")}
     >
-      <span className="bg-muted text-foreground grid size-11 place-items-center rounded-full">
+      <span className="bg-muted text-foreground grid size-11 place-items-center rounded-lg">
         <Plus className="size-5" />
       </span>
       Новая тематика

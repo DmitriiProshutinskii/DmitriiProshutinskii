@@ -9,6 +9,14 @@ export default defineConfig(({ mode }) => ({
   // relative paths only for the single-file preview; the real site serves /f/<token> routes
   base: mode === "artifact" ? "./" : "/",
   plugins: [react(), tailwindcss(), ...(mode === "artifact" ? [viteSingleFile()] : [])],
-  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  resolve: {
+    alias: [
+      { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
+      // Demo photos are only for the preview; the real site gets a stub.
+      ...(mode === "artifact"
+        ? []
+        : [{ find: /^\.\/demo-photos$/, replacement: fileURLToPath(new URL("./src/lib/demo-photos.stub.ts", import.meta.url)) }]),
+    ],
+  },
   build: mode === "artifact" ? { outDir: "dist-artifact" } : {},
 }))

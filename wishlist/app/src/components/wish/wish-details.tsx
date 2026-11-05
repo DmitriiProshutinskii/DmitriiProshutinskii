@@ -39,11 +39,12 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       <div
         className={cn(
           // Kept short so the reserve form is on screen when the sheet opens on a phone.
-          "bg-tile relative mx-auto grid aspect-[16/10] max-h-[32dvh] w-full place-items-center overflow-hidden rounded-3xl",
-          hot && "bg-hot-soft ring-hot ring-2 ring-inset"
+          "bg-tile relative mx-auto grid aspect-[16/10] max-h-[32dvh] w-full place-items-center overflow-hidden rounded-2xl after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-['']",
+          hot && "bg-hot-soft after:ring-2 after:ring-inset after:ring-hot",
+          wish.photo && "bg-white"
         )}
       >
-        <WishPhoto wish={wish} className="size-[70%]" />
+        <WishPhoto wish={wish} fit="contain" className={wish.photo ? "p-3" : "size-[70%]"} />
         {wish.multi && (
           <Badge variant="outline" className="absolute bottom-3 left-3 border-transparent shadow-sm">
             <Layers />
@@ -66,7 +67,11 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <span className="font-display text-2xl font-medium tabular-nums">{formatPrice(wish.price)}</span>
+        {wish.price === null ? (
+          <span className="text-muted-foreground font-medium">Цена не указана</span>
+        ) : (
+          <span className="text-2xl font-bold tracking-tight tabular-nums">{formatPrice(wish.price)}</span>
+        )}
         {wish.url && (
           <Button variant="outline" asChild>
             <a href={wish.url} target="_blank" rel="noopener noreferrer">
@@ -78,9 +83,9 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       </div>
 
       {wish.note && (
-        <div className="bg-muted rounded-3xl p-4 text-sm break-words">
+        <div className="bg-muted rounded-2xl p-4 text-sm break-words">
           <div className="text-muted-foreground mb-0.5 text-[11px] font-bold tracking-wider uppercase">
-            {role === "friend" ? `Комментарий${ownerName ? ` от ${ownerName}` : ""}` : "Твой комментарий"}
+            {role === "friend" ? (ownerName ? `${ownerName} пишет` : "Комментарий") : "Твой комментарий"}
           </div>
           {wish.note}
         </div>
@@ -143,7 +148,7 @@ function ReserveCard({
   else if (wish.multi) title = count ? `Уже дарят: ${count}` : "Можно подарить нескольким"
 
   return (
-    <Card className="gap-4 rounded-3xl py-4 shadow-none">
+    <Card className="gap-4 rounded-2xl py-4 shadow-none">
       {title && (
         <CardHeader className="px-4">
           <CardTitle>{title}</CardTitle>

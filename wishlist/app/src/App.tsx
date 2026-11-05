@@ -83,11 +83,11 @@ function Demo() {
             history.replaceState(null, "", "#" + r)
           }}
         >
-          <TabsList className="h-12 rounded-full">
-            <TabsTrigger value="owner" className="rounded-full">
+          <TabsList className="h-12 rounded-lg">
+            <TabsTrigger value="owner" className="rounded-lg">
               Моя версия
             </TabsTrigger>
-            <TabsTrigger value="friend" className="rounded-full">
+            <TabsTrigger value="friend" className="rounded-lg">
               Для друзей
             </TabsTrigger>
           </TabsList>

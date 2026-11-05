@@ -26,9 +26,9 @@ export function LoginScreen({ onLogin }: { onLogin: (password: string) => Promis
 
   return (
     <div className="grid min-h-dvh place-items-center pr-[max(16px,env(safe-area-inset-right,0px))] pl-[max(16px,env(safe-area-inset-left,0px))]">
-      <Card className="w-full max-w-sm rounded-3xl">
+      <Card className="w-full max-w-sm rounded-2xl">
         <CardHeader>
-          <span className="bg-hot-soft text-hot mb-2 grid size-11 place-items-center rounded-full">
+          <span className="bg-hot-soft text-hot mb-2 grid size-11 place-items-center rounded-lg">
             <Gift className="size-5" />
           </span>
           <CardTitle className="font-display text-2xl">Вишлист</CardTitle>

@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils"
 import { SheetFooter } from "@/components/wish/responsive-sheet"
 
 const pill =
-  "flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-accent"
+  "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-accent"
 
 interface Props {
   themes: Theme[]

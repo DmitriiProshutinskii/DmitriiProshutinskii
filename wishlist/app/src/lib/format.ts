@@ -35,4 +35,5 @@ export const plural = (n: number, one: string, few: string, many: string) => {
 /** A single-gift wish is taken once anyone reserves it; multi-gift wishes never are. */
 export const isTaken = (w: Wish) => !w.multi && w.reservations.length > 0
 
-export const byPriority = (a: Wish, b: Wish) => b.priority - a.priority || (b.price ?? 0) - (a.price ?? 0)
+/** Highest priority first; within a priority, the order the owner added them (Array.sort is stable). */
+export const byPriority = (a: Wish, b: Wish) => b.priority - a.priority

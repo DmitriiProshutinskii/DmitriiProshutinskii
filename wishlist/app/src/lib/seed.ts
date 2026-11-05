@@ -1,3 +1,4 @@
+import { demoPhoto } from "./demo-photos"
 import type { Param, Theme, Wish } from "./types"
 
 // Example content for the mockup — to be replaced with real wishes.
@@ -35,6 +36,19 @@ export const seedThemes: Theme[] = [
 
 export const seedWishes: Wish[] = [
   {
+    id: "w0",
+    title: "Кокпит Fanatec CSL Cockpit V1.5",
+    url: "https://checkout.fanatec.com/products/csl-cockpit-v1-5",
+    price: null,
+    priority: 3,
+    multi: false,
+    themeIds: ["kart"],
+    note: "Под мой руль Fanatec GT DD Pro. В официальном магазине Fanatec стоит $299,99.",
+    photo: demoPhoto("cockpit"),
+    illustration: null,
+    reservations: [],
+  },
+  {
     id: "w1",
     title: "Наушники Sony WH-1000XM5",
     url: "https://market.yandex.ru/search?text=Sony%20WH-1000XM5",
@@ -69,7 +83,7 @@ export const seedWishes: Wish[] = [
     multi: false,
     themeIds: ["coffee"],
     note: "",
-    photo: null,
+    photo: demoPhoto("grinder"),
     illustration: "grinder",
     reservations: [],
   },
@@ -82,7 +96,7 @@ export const seedWishes: Wish[] = [
     multi: false,
     themeIds: ["desk"],
     note: "",
-    photo: null,
+    photo: demoPhoto("keyboard"),
     illustration: "keyboard",
     reservations: [],
   },
@@ -107,7 +121,7 @@ export const seedWishes: Wish[] = [
     priority: 2,
     multi: true,
     themeIds: ["coffee"],
-    photo: null,
+    photo: demoPhoto("beans"),
     illustration: "beans",
     note: "Светлая обжарка, Эфиопия или Кения.",
     reservations: [{ id: "s4", by: "Катя", note: "Привезу пачку из Питера", mine: false }],
@@ -140,14 +154,14 @@ export const seedWishes: Wish[] = [
   },
   {
     id: "w9",
-    title: "Термокружка Stanley 0,47 л",
+    title: "Термокружка Stanley Transit 0,47 л",
     url: "https://www.wildberries.ru/catalog/0/search.aspx?search=Stanley%20термокружка",
     price: 3200,
     priority: 1,
     multi: false,
     themeIds: ["coffee"],
     note: "",
-    photo: null,
+    photo: demoPhoto("tumbler"),
     illustration: "tumbler",
     reservations: [],
   },
