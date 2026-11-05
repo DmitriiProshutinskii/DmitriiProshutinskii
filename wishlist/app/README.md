@@ -7,6 +7,10 @@
 
 Как развернуть на своём сервере: [DEPLOY.md](DEPLOY.md).
 
+**Стартовый список.** Мои желания, тематики и параметры лежат в `src/lib/my-wishes.ts`. Из этого файла строится макет,
+и из него же сервер заполняет базу при первом запуске (когда `db.json` ещё нет), а фото скачивает с сайтов магазинов.
+Дальше список живёт в базе и редактируется на сайте. Запустить с пустым списком: `STARTER_DATA=0`.
+
 ## Стек
 
 - Клиент: React 19 · Vite · Tailwind CSS 4 · [shadcn/ui](https://ui.shadcn.com) (компоненты в `src/components/ui`, конфиг в `components.json`) · Radix · vaul · sonner · lucide. Шрифт Geist раздаётся с собственного сервера.
@@ -23,7 +27,8 @@ OWNER_PASSWORD=dev-password INSECURE_COOKIES=1 npm start   # http://localhost:30
 ```
 
 Переменные сервера: `OWNER_PASSWORD` (обязательно, от 8 символов), `DATA_DIR` (по умолчанию `./data`),
-`STATIC_DIR` (`./dist`), `PORT` (`3000`), `INSECURE_COOKIES=1` — только для локальной работы без HTTPS.
+`STATIC_DIR` (`./dist`), `PORT` (`3000`), `STARTER_DATA=0` — первый запуск с пустым списком,
+`INSECURE_COOKIES=1` — только для локальной работы без HTTPS.
 
 Другие команды:
 
@@ -36,5 +41,6 @@ OWNER_PASSWORD=dev-password INSECURE_COOKIES=1 npm start   # http://localhost:30
 - `src/App.tsx` — выбор режима: макет, моя версия, версия для друзей
 - `src/components/wish/` — экран списка, плитки, детали, формы, настройки, вход
 - `src/lib/backend.ts` — клиент API; `src/lib/demo-backend.ts` — то же в памяти для макета
+- `src/lib/my-wishes.ts` — стартовый список (желания, тематики, параметры)
 - `src/lib/types.ts` — модель данных, общая для клиента и сервера
 - `server/` — API, хранение, загрузка фото, подтягивание данных по ссылке на товар

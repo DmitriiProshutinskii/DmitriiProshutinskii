@@ -40,6 +40,7 @@ export interface StoredTheme {
   name: string
   description: string
   color: ThemeColor
+  flag?: boolean
   pledges: StoredPledge[]
 }
 
@@ -77,14 +78,20 @@ export class Store {
     this.file = join(dir, "db.json")
   }
 
-  async load() {
+  /**
+   * Reads the database, or creates it when there is none yet (optionally filled by `init`).
+   * Resolves to true when it was created now.
+   */
+  async load(init?: (base: Db) => Db): Promise<boolean> {
     await mkdir(join(this.dir, "uploads"), { recursive: true })
     try {
       this.db = JSON.parse(await readFile(this.file, "utf8"))
+      return false
     } catch (e) {
       if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e
-      this.db = empty()
+      this.db = init ? init(empty()) : empty()
       await this.persist()
+      return true
     }
   }
 

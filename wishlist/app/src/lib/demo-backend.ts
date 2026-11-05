@@ -1,5 +1,5 @@
 import { ApiError, type Backend } from "./backend"
-import { seedParams, seedThemes, seedWishes } from "./seed"
+import { seedOwnerName, seedParams, seedThemes, seedTitle, seedWishes } from "./seed"
 import type { Role, Settings, Theme, Wish, WishlistView } from "./types"
 
 /** In-memory stand-in for the server, used by the clickable preview. Mirrors what each role may see. */
@@ -10,8 +10,8 @@ interface DemoDb extends Settings {
 }
 
 const db: DemoDb = {
-  title: "Вишлист Димы",
-  ownerName: "Дима",
+  title: seedTitle,
+  ownerName: seedOwnerName,
   params: seedParams,
   themes: seedThemes,
   wishes: seedWishes,

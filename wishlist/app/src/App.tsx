@@ -74,7 +74,7 @@ function Demo() {
     <div className="border-b">
       <div className={`${gutter} flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2.5`}>
         <p className="text-muted-foreground text-xs">
-          <b className="text-foreground">Макет</b> · данные примерные, фото пока заглушки
+          <b className="text-foreground">Макет</b> · твой список, изменения здесь не сохраняются
         </p>
         <Tabs
           value={role}
