@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* shadcn/ui tokens (zinc base) + wishlist extras: "очень хочу" accent, photo tile, theme colours */
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.985 0.002 286);
+  --foreground: oklch(0.17 0.006 286);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.006 286);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0.006 286);
+  --primary: oklch(0.2 0.006 286);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.955 0.003 286);
+  --secondary-foreground: oklch(0.2 0.006 286);
+  --muted: oklch(0.945 0.004 286);
+  --muted-foreground: oklch(0.5 0.014 286);
+  --accent: oklch(0.955 0.003 286);
+  --accent-foreground: oklch(0.2 0.006 286);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.915 0.005 286);
+  --input: oklch(0.905 0.005 286);
+  --ring: oklch(0.6 0.016 286);
+
+  --tile: oklch(0.94 0.004 286);
+  --scrim: oklch(0.985 0.002 286 / 0.62);
+  --hot: oklch(0.55 0.22 8);
+  --hot-foreground: oklch(1 0 0);
+  --hot-soft: oklch(0.95 0.035 8);
+  --mine: oklch(0.5 0.12 155);
+  --mine-foreground: oklch(1 0 0);
+
+  --th-red: oklch(0.52 0.19 28);
+  --th-red-soft: oklch(0.94 0.035 28);
+  --th-brown: oklch(0.5 0.08 50);
+  --th-brown-soft: oklch(0.94 0.02 60);
+  --th-blue: oklch(0.52 0.18 265);
+  --th-blue-soft: oklch(0.94 0.03 265);
+  --th-green: oklch(0.55 0.12 155);
+  --th-green-soft: oklch(0.94 0.04 155);
+
+  /* default accent for avatars etc. outside a theme context */
+  --th: var(--hot);
+  --th-soft: var(--hot-soft);
+}
+
+.dark {
+  --background: oklch(0.15 0.005 286);
+  --foreground: oklch(0.96 0.003 286);
+  --card: oklch(0.195 0.006 286);
+  --card-foreground: oklch(0.96 0.003 286);
+  --popover: oklch(0.195 0.006 286);
+  --popover-foreground: oklch(0.96 0.003 286);
+  --primary: oklch(0.94 0.004 286);
+  --primary-foreground: oklch(0.17 0.006 286);
+  --secondary: oklch(0.26 0.006 286);
+  --secondary-foreground: oklch(0.96 0.003 286);
+  --muted: oklch(0.25 0.006 286);
+  --muted-foreground: oklch(0.7 0.012 286);
+  --accent: oklch(0.26 0.006 286);
+  --accent-foreground: oklch(0.96 0.003 286);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.55 0.015 286);
+
+  --tile: oklch(0.24 0.006 286);
+  --scrim: oklch(0.15 0.005 286 / 0.62);
+  --hot: oklch(0.72 0.17 8);
+  --hot-foreground: oklch(0.2 0.05 8);
+  --hot-soft: oklch(0.3 0.07 8);
+  --mine: oklch(0.8 0.14 155);
+  --mine-foreground: oklch(0.2 0.04 155);
+
+  --th-red: oklch(0.74 0.15 28);
+  --th-red-soft: oklch(0.27 0.05 28);
+  --th-brown: oklch(0.76 0.08 60);
+  --th-brown-soft: oklch(0.26 0.025 60);
+  --th-blue: oklch(0.76 0.12 265);
+  --th-blue-soft: oklch(0.26 0.06 265);
+  --th-green: oklch(0.8 0.12 155);
+  --th-green-soft: oklch(0.26 0.04 155);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-tile: var(--tile);
+  --color-scrim: var(--scrim);
+  --color-hot: var(--hot);
+  --color-hot-foreground: var(--hot-foreground);
+  --color-hot-soft: var(--hot-soft);
+  --color-mine: var(--mine);
+  --color-mine-foreground: var(--mine-foreground);
+  --color-th: var(--th);
+  --color-th-soft: var(--th-soft);
+}
+
+/* A theme card/chip sets --th / --th-soft with one of these classes, then uses bg-th-soft / text-th. */
+.th-red { --th: var(--th-red); --th-soft: var(--th-red-soft); }
+.th-brown { --th: var(--th-brown); --th-soft: var(--th-brown-soft); }
+.th-blue { --th: var(--th-blue); --th-soft: var(--th-blue-soft); }
+.th-green { --th: var(--th-green); --th-soft: var(--th-green-soft); }
+
+/* Chequered flag corner for the karting theme */
+.flag-corner::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  opacity: 0.85;
+  background: conic-gradient(var(--foreground) 25%, transparent 0 50%, var(--foreground) 0 75%, transparent 0) 0 0 / 12px 12px;
+  -webkit-mask: linear-gradient(225deg, #000 35%, transparent 70%);
+  mask: linear-gradient(225deg, #000 35%, transparent 70%);
+  pointer-events: none;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Unlayered on purpose: a host page's own reset (e.g. the Artifact viewer) is unlayered too and would
+   otherwise beat the @layer base colours, leaving dark text on a dark page or light text on a light one. */
+html:root,
+html:root > body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
