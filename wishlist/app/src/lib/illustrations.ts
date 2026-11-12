@@ -26,6 +26,18 @@ export const illustrations: Record<string, string> = {
       `<path d="M26 60H94M25 76H95M24 92H96" stroke="#5f704f" stroke-width="3"/>` +
       `<path d="M47 35Q60 50 73 35" fill="#3c4837"/><path d="M60 44V104" stroke="#d6d9c9" stroke-width="2"/>`
   ),
+  // Vacuum coffee maker (siphon): two glass chambers on a stand over a burner.
+  siphon: svg(
+    `<path d="M88 22V108M76 108H100" stroke="#3a3f47" stroke-width="5" stroke-linecap="round"/>` +
+      `<path d="M88 30H70M88 66H72" stroke="#3a3f47" stroke-width="4" stroke-linecap="round"/>` +
+      `<path d="M40 18H70L66 48C65 52 62 54 58 54H52C48 54 45 52 44 48Z" fill="#e8f2fb" fill-opacity=".9" stroke="#8fa3b8" stroke-width="2.5"/>` +
+      `<path d="M42 34H68L66 48C65 52 62 54 58 54H52C48 54 45 52 44 48Z" fill="#6b4226"/>` +
+      `<rect x="53" y="52" width="4" height="18" fill="#c9d8e8" stroke="#8fa3b8" stroke-width="1.5"/>` +
+      `<circle cx="55" cy="76" r="17" fill="#e8f2fb" fill-opacity=".9" stroke="#8fa3b8" stroke-width="2.5"/>` +
+      `<path d="M39 80A17 17 0 0 0 71 80Z" fill="#8a5a36" fill-opacity=".55"/>` +
+      `<rect x="45" y="103" width="20" height="8" rx="2" fill="#3a3f47"/>` +
+      `<path d="M55 102C51 99 53 97 55 95C57 97 59 99 55 102Z" fill="#ff9d2e"/>`
+  ),
   // Dental CT: a tooth under a scan line.
   tooth: svg(
     `<path d="M24 26V18H34M86 18H96V26M24 94V102H34M86 102H96V94" fill="none" stroke="#9aa3b2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>` +

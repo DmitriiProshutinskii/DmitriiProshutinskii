@@ -118,6 +118,17 @@ export const starter = {
       photoUrl: "https://s3.shop.tastycoffee.ru/coffee-static/files/shares/data/_newpack10/filter_mono/maunt-new.jpg",
     },
     {
+      key: "siphon",
+      title: "Вакуумный кофейник (сифон) со стеклянной колбой",
+      url: "https://market.yandex.ru/cc/BYFZz7",
+      price: null,
+      priority: 2,
+      multi: false,
+      themes: ["coffee"],
+      note: "Подойдёт любой вакуумный кофейник со стеклянной колбой. По ссылке — вариант, который мне понравился.",
+      illustration: "siphon",
+    },
+    {
       key: "nike-shoes",
       title: "Кроссовки Nike 24.7",
       url: "https://www.nike.com/t/24-7-mens-shoes-1UaK9D44/IR0447-001",
