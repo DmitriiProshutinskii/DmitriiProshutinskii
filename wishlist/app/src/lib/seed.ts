@@ -18,6 +18,6 @@ export const seedWishes: Wish[] = starter.wishes.map(({ key, themes, photoUrl: _
   id: key,
   themeIds: themes,
   photo: demoPhoto(key),
-  illustration: FALLBACK_ART[key] ?? null,
+  illustration: ("illustration" in w ? w.illustration : null) ?? FALLBACK_ART[key] ?? null,
   reservations: [],
 }))

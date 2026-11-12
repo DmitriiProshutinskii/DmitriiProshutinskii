@@ -31,6 +31,8 @@ export interface StoredWish {
   themeIds: string[]
   note: string
   photo: string | null
+  /** Drawing shown when there is no photo (starter wishes for services). */
+  illustration?: string | null
   createdAt: string
   reservations: StoredReservation[]
 }

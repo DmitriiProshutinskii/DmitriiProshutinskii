@@ -40,6 +40,7 @@ export function starterDb(base: Db): { db: Db; photos: PhotoJob[] } {
         themeIds: w.themes.map((k) => themeIds.get(k)).filter((x): x is string => !!x),
         note: w.note,
         photo: null,
+        illustration: "illustration" in w ? w.illustration : null,
         createdAt: now,
         reservations: [],
       }
