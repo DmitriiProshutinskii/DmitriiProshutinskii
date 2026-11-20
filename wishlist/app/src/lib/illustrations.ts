@@ -66,14 +66,14 @@ export const illustrations: Record<string, string> = {
       `<path d="M38 50C30 50 26 56 26 62M82 50C90 50 94 56 94 62" fill="none" stroke="#3a3f47" stroke-width="4" stroke-linecap="round"/>` +
       `<rect x="20" y="60" width="12" height="16" rx="4" fill="#3a3f47"/><rect x="88" y="60" width="12" height="16" rx="4" fill="#3a3f47"/>`
   ),
-  // Small crossbody bag with a strap and a zip.
+  // Flat belt pouch on a belt, tucked behind the waistband.
   bag: svg(
-    `<path d="M30 60C30 30 52 16 60 16C68 16 90 30 90 60" fill="none" stroke="#7a5c43" stroke-width="5" stroke-linecap="round"/>` +
-      `<rect x="24" y="54" width="72" height="50" rx="12" fill="#3f4652"/>` +
-      `<path d="M30 68H90" stroke="#c9ced8" stroke-width="2.5" stroke-linecap="round"/>` +
-      `<rect x="80" y="64" width="6" height="11" rx="2" fill="#c9ced8"/>` +
-      `<rect x="40" y="82" width="40" height="14" rx="4" fill="#4c5563"/>` +
-      `<rect x="54" y="86" width="12" height="6" rx="2" fill="#7a5c43"/>`
+    `<rect x="8" y="46" width="104" height="14" rx="3" fill="#7a6a4f"/>` +
+      `<rect x="30" y="40" width="60" height="44" rx="5" fill="#2f343c"/>` +
+      `<rect x="30" y="40" width="60" height="20" rx="5" fill="#3f4652"/>` +
+      `<path d="M30 60H90" stroke="#565e6b" stroke-width="2"/>` +
+      `<rect x="76" y="62" width="7" height="16" rx="1.5" fill="#e4572e"/>` +
+      `<path d="M8 90H112" stroke="#c9b48f" stroke-width="10" stroke-linecap="round" opacity=".55"/>`
   ),
   // Phone in a case hanging from a crossbody cord.
   lanyard: svg(
