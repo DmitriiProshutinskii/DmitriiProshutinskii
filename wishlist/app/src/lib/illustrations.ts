@@ -84,6 +84,15 @@ export const illustrations: Record<string, string> = {
       `<circle cx="52" cy="70" r="3" fill="#6b7280"/><circle cx="58" cy="76" r="3" fill="#6b7280"/><circle cx="52" cy="77" r="2" fill="#6b7280"/>` +
       `<circle cx="56" cy="64" r="3" fill="none" stroke="#c48a3a" stroke-width="2"/><circle cx="64" cy="64" r="3" fill="none" stroke="#c48a3a" stroke-width="2"/>`
   ),
+  // Travel mug: a tapered tumbler with a lid and a wisp of steam.
+  mug: svg(
+    `<path d="M58 22C54 16 62 12 58 6M66 22C62 16 70 12 66 6" fill="none" stroke="#b9bfca" stroke-width="2.5" stroke-linecap="round"/>` +
+      `<rect x="36" y="26" width="48" height="12" rx="4" fill="#3a3f47"/>` +
+      `<rect x="56" y="22" width="16" height="6" rx="2" fill="#3a3f47"/>` +
+      `<path d="M38 38H82L76 108C75.6 111 73 113 70 113H50C47 113 44.4 111 44 108Z" fill="#a9c5b4"/>` +
+      `<path d="M41 60H79L78 72H42Z" fill="#8a5a36"/>` +
+      `<rect x="52" y="82" width="16" height="10" rx="3" fill="#f6f1e8" opacity=".8"/>`
+  ),
   // Massage gift certificate: a card with a ribbon and a stack of spa stones.
   certificate: svg(
     `<rect x="12" y="28" width="84" height="56" rx="7" fill="#f6ead9" stroke="#d9c2a3" stroke-width="2"/>` +

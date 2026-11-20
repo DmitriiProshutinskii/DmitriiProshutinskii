@@ -172,6 +172,17 @@ export const starter = {
       illustration: "siphon",
     },
     {
+      key: "mug",
+      title: "Термокружка Samadoyo",
+      url: "https://market.yandex.ru/cc/BcE4vo",
+      price: 3055,
+      priority: 1,
+      multi: false,
+      themes: ["coffee"],
+      note: "Сварил дома кофе, налил и пошёл гулять. Мой термос большой и немного подтекает, хотя в целом нормальный, так что это не срочно. Кружка компактнее и стильнее, её удобно брать с собой по городу.",
+      illustration: "mug",
+    },
+    {
       key: "nike-shoes",
       title: "Кроссовки Nike 24.7",
       url: "https://www.nike.com/t/24-7-mens-shoes-1UaK9D44/IR0447-001",
