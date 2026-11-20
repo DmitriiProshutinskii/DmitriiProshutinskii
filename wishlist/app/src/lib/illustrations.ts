@@ -66,6 +66,24 @@ export const illustrations: Record<string, string> = {
       `<path d="M38 50C30 50 26 56 26 62M82 50C90 50 94 56 94 62" fill="none" stroke="#3a3f47" stroke-width="4" stroke-linecap="round"/>` +
       `<rect x="20" y="60" width="12" height="16" rx="4" fill="#3a3f47"/><rect x="88" y="60" width="12" height="16" rx="4" fill="#3a3f47"/>`
   ),
+  // Small crossbody bag with a strap and a zip.
+  bag: svg(
+    `<path d="M30 60C30 30 52 16 60 16C68 16 90 30 90 60" fill="none" stroke="#7a5c43" stroke-width="5" stroke-linecap="round"/>` +
+      `<rect x="24" y="54" width="72" height="50" rx="12" fill="#3f4652"/>` +
+      `<path d="M30 68H90" stroke="#c9ced8" stroke-width="2.5" stroke-linecap="round"/>` +
+      `<rect x="80" y="64" width="6" height="11" rx="2" fill="#c9ced8"/>` +
+      `<rect x="40" y="82" width="40" height="14" rx="4" fill="#4c5563"/>` +
+      `<rect x="54" y="86" width="12" height="6" rx="2" fill="#7a5c43"/>`
+  ),
+  // Phone in a case hanging from a crossbody cord.
+  lanyard: svg(
+    `<path d="M22 14C30 44 44 60 56 66M98 14C90 44 76 60 64 66" fill="none" stroke="#c48a3a" stroke-width="4" stroke-linecap="round"/>` +
+      `<rect x="40" y="58" width="40" height="56" rx="9" fill="#d6cfc4"/>` +
+      `<rect x="44" y="62" width="32" height="48" rx="6" fill="#ece7df"/>` +
+      `<rect x="47" y="65" width="16" height="16" rx="4" fill="#3a3f47"/>` +
+      `<circle cx="52" cy="70" r="3" fill="#6b7280"/><circle cx="58" cy="76" r="3" fill="#6b7280"/><circle cx="52" cy="77" r="2" fill="#6b7280"/>` +
+      `<circle cx="56" cy="64" r="3" fill="none" stroke="#c48a3a" stroke-width="2"/><circle cx="64" cy="64" r="3" fill="none" stroke="#c48a3a" stroke-width="2"/>`
+  ),
   // Massage gift certificate: a card with a ribbon and a stack of spa stones.
   certificate: svg(
     `<rect x="12" y="28" width="84" height="56" rx="7" fill="#f6ead9" stroke="#d9c2a3" stroke-width="2"/>` +
