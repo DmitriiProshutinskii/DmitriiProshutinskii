@@ -1,0 +1,578 @@
+<title>Вишлист Димы</title>
+<meta charset="utf-8">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: marketplace app — title + params, horizontal row of themes, filter chips, 2–4 column photo grid; details open in a bottom sheet */
+:root {
+  --bg: #f6f6f8; --surface: #ffffff; --tile: #ececf0; --ink: #15161b; --faint: #6a6c77; --line: #e2e3e9;
+  --btn: #15161b; --btn-ink: #ffffff; --scrim: rgba(246,246,248,.62);
+  --hot: #e8295a; --hot-ink: #ffffff; --hot-tint: #ffe1e8;
+  --th-red: #d7322a; --th-red-tint: #fde3df;
+  --th-brown: #8a5636; --th-brown-tint: #f3e6db;
+  --th-blue: #3159d1; --th-blue-tint: #e1e8fb;
+  --th-green: #2b8a5b; --th-green-tint: #dcf2e6;
+  --f-display: "Unbounded", "Manrope", system-ui, sans-serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1014; --surface: #191a20; --tile: #24252c; --ink: #eeeff4; --faint: #9b9dab; --line: #2d2f38;
+    --btn: #eeeff4; --btn-ink: #0f1014; --scrim: rgba(15,16,20,.62);
+    --hot: #ff6b8e; --hot-ink: #2a0610; --hot-tint: #45202b;
+    --th-red: #ff7b6f; --th-red-tint: #3a1b18;
+    --th-brown: #d6a07a; --th-brown-tint: #33261d;
+    --th-blue: #8fa7ff; --th-blue-tint: #1d2648;
+    --th-green: #6fd1a0; --th-green-tint: #16301f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1014; --surface: #191a20; --tile: #24252c; --ink: #eeeff4; --faint: #9b9dab; --line: #2d2f38;
+  --btn: #eeeff4; --btn-ink: #0f1014; --scrim: rgba(15,16,20,.62);
+  --hot: #ff6b8e; --hot-ink: #2a0610; --hot-tint: #45202b;
+  --th-red: #ff7b6f; --th-red-tint: #3a1b18;
+  --th-brown: #d6a07a; --th-brown-tint: #33261d;
+  --th-blue: #8fa7ff; --th-blue-tint: #1d2648;
+  --th-green: #6fd1a0; --th-green-tint: #16301f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45; }
+button { font: inherit; color: inherit; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.wrap {
+  max-width: 1040px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* mockup control strip */
+.mock { border-bottom: 1px solid var(--line); }
+.mock .wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding-block: 10px; }
+.mock-label { font-size: .8rem; color: var(--faint); }
+.mock-label b { color: var(--ink); font-weight: 700; }
+.seg { display: inline-flex; background: var(--tile); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; cursor: pointer; font-size: .86rem; font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink); }
+
+.app { display: grid; gap: 26px; padding-block: 24px 64px; }
+.app > *, .app section { min-width: 0; }
+
+/* header */
+.head { display: grid; gap: 12px; }
+.head-row { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.head h1 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: clamp(1.9rem, 6vw, 2.8rem); letter-spacing: -.03em; line-height: 1.02; text-wrap: balance; }
+.head-sub { margin: 0; color: var(--faint); max-width: 60ch; }
+.round { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--surface); box-shadow: 0 0 0 1px var(--line); display: grid; place-items: center; cursor: pointer; flex: none; }
+.round svg { width: 20px; height: 20px; }
+.params { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.params li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-size: .85rem; display: flex; gap: 6px; }
+.params span { color: var(--faint); }
+
+/* section heading */
+.sec-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.sec-h h2 { margin: 0; font-family: var(--f-display); font-weight: 500; font-size: 1.15rem; letter-spacing: -.01em; }
+.sec-h p { margin: 0; color: var(--faint); font-size: .85rem; }
+
+/* themes row */
+.rail { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity; margin-inline: -4px; padding-inline: 4px; }
+.theme {
+  flex: 0 0 min(78%, 260px); scroll-snap-align: start; position: relative; overflow: hidden;
+  border: 0; text-align: left; cursor: pointer; border-radius: 22px; padding: 16px 16px 14px;
+  background: var(--th-tint); color: var(--ink); display: flex; flex-direction: column; gap: 6px; min-height: 150px;
+}
+.theme h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; color: var(--th); letter-spacing: -.01em; }
+.theme p { margin: 0; font-size: .85rem; color: var(--faint); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.theme .meta { margin-top: auto; font-size: .8rem; font-weight: 700; display: flex; gap: 10px; flex-wrap: wrap; }
+.theme .meta span { color: var(--th); }
+.theme.flag::after {
+  content: ""; position: absolute; right: 0; top: 0; width: 44px; height: 44px; opacity: .9;
+  background: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 11px 11px;
+  -webkit-mask: linear-gradient(225deg, #000 40%, transparent 70%); mask: linear-gradient(225deg, #000 40%, transparent 70%);
+}
+.th-red { --th: var(--th-red); --th-tint: var(--th-red-tint); }
+.th-brown { --th: var(--th-brown); --th-tint: var(--th-brown-tint); }
+.th-blue { --th: var(--th-blue); --th-tint: var(--th-blue-tint); }
+.th-green { --th: var(--th-green); --th-tint: var(--th-green-tint); }
+.theme.new { background: transparent; box-shadow: inset 0 0 0 2px var(--line); border: 0; align-items: center; justify-content: center; text-align: center; color: var(--faint); font-weight: 600; }
+.plus { width: 46px; height: 46px; border-radius: 50%; background: var(--tile); display: grid; place-items: center; font-size: 1.6rem; line-height: 1; color: var(--ink); }
+
+/* filters */
+.filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+.chip { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 13px; font-size: .86rem; font-weight: 600; cursor: pointer; white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; }
+.chip small { color: var(--faint); font-weight: 600; font-size: .8em; }
+.chip[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.chip[aria-pressed="true"] small { color: inherit; opacity: .7; }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--hot); }
+
+/* grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 22px 14px; }
+.tile { border: 0; background: none; padding: 0; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ph { aspect-ratio: 1; max-width: 100%; border-radius: 22px; background: var(--tile); position: relative; display: grid; place-items: center; overflow: hidden; }
+.ph svg.ill { width: 74%; height: 74%; }
+.ph img { width: 100%; height: 100%; object-fit: cover; }
+.ph .letter { font-family: var(--f-display); font-size: 2.4rem; color: var(--faint); }
+.tile.p3 .ph, .sheet-ph.p3 { background: var(--hot-tint); box-shadow: inset 0 0 0 2px var(--hot); }
+.tile:hover .ph { filter: brightness(.97); }
+.b-hot { position: absolute; top: 10px; left: 10px; background: var(--hot); color: var(--hot-ink); font-weight: 800; font-size: .72rem; padding: 4px 9px; border-radius: 999px; }
+.b-multi { position: absolute; left: 10px; bottom: 10px; background: var(--surface); color: var(--ink); font-weight: 700; font-size: .72rem; padding: 4px 9px 4px 7px; border-radius: 999px; display: inline-flex; gap: 5px; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.b-multi svg { width: 13px; height: 13px; }
+.res-cover { position: absolute; inset: 0; background: var(--scrim); display: grid; place-items: center; }
+.res-cover span { background: var(--btn); color: var(--btn-ink); font-weight: 700; font-size: .78rem; padding: 6px 12px; border-radius: 999px; }
+.tile-title { font-weight: 600; font-size: .95rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; padding-inline: 4px; }
+.tile-price { font-weight: 800; font-variant-numeric: tabular-nums; padding-inline: 4px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.tile-price small { font-weight: 500; color: var(--faint); font-size: .78rem; }
+.tile.is-res .tile-title, .tile.is-res .tile-price { color: var(--faint); }
+.tile.add .ph { background: transparent; box-shadow: inset 0 0 0 2px var(--line); border-radius: 22px; }
+.tile.add .ph > div { display: grid; justify-items: center; gap: 10px; font-weight: 600; color: var(--ink); }
+.empty { color: var(--faint); grid-column: 1 / -1; padding: 20px 0; }
+
+.how { border-top: 1px solid var(--line); padding-top: 20px; display: grid; gap: 10px; font-size: .92rem; }
+.how h2 { margin: 0; font-size: 1rem; }
+.how ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; max-width: 74ch; color: var(--faint); }
+.how b { color: var(--ink); }
+
+/* sheet */
+dialog.sheet {
+  border: 0; padding: 0; background: var(--surface); color: var(--ink);
+  width: min(560px, 100%); max-width: 100%; max-height: 92dvh; border-radius: 28px; overflow: auto;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.45);
+}
+dialog.sheet::backdrop { background: rgba(10,10,14,.45); }
+@media (max-width: 600px) {
+  dialog.sheet { margin: auto 0 0; width: 100%; border-radius: 26px 26px 0 0; max-height: 90dvh; }
+}
+.sheet-in { display: grid; gap: 16px; padding: 16px 18px calc(22px + env(safe-area-inset-bottom, 0px)); }
+.sheet-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sheet-top .kicker { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); }
+.round.sm { width: 36px; height: 36px; background: var(--tile); box-shadow: none; }
+.sheet-ph { aspect-ratio: 4 / 3; border-radius: 22px; }
+.sheet-ph svg.ill { width: 52%; height: 70%; }
+.sheet h2 { margin: 0; font-size: 1.35rem; line-height: 1.2; font-weight: 800; letter-spacing: -.01em; text-wrap: balance; }
+.price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.price-big { font-family: var(--f-display); font-weight: 500; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.shop-link { font-weight: 700; font-size: .9rem; text-underline-offset: 3px; }
+.pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { border-radius: 999px; padding: 4px 10px; font-size: .78rem; font-weight: 700; background: var(--tile); color: var(--ink); border: 0; }
+.pill.hot { background: var(--hot); color: var(--hot-ink); }
+button.pill.th { background: var(--th-tint); color: var(--th); cursor: pointer; }
+.note { margin: 0; background: var(--tile); border-radius: 16px; padding: 12px 14px; font-size: .92rem; }
+.note span { display: block; font-size: .75rem; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
+.box { border: 1px solid var(--line); border-radius: 18px; padding: 14px; display: grid; gap: 10px; }
+.box h3 { margin: 0; font-size: .95rem; font-weight: 800; }
+.people { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.people li { display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; font-size: .9rem; }
+.ava { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: .85rem; background: var(--th-tint, var(--hot-tint)); color: var(--th, var(--hot)); }
+.people .who { font-weight: 700; }
+.people .txt { color: var(--faint); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--faint); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; font-size: .85rem; justify-self: start; }
+.linkbtn.danger { color: var(--hot); }
+
+.form { display: grid; gap: 10px; }
+.field { display: grid; gap: 5px; min-width: 0; }
+.field > label, .field > .lbl { font-size: .8rem; font-weight: 700; color: var(--faint); }
+.field input[type="text"], .field input[type="url"], .field input[type="number"], .field textarea {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; min-width: 0;
+}
+.field textarea { min-height: 64px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn { border: 0; background: var(--btn); color: var(--btn-ink); font-weight: 800; padding: 13px 18px; border-radius: 14px; cursor: pointer; font-size: .95rem; }
+.btn.wide { width: 100%; }
+.small-note { margin: 0; font-size: .8rem; color: var(--faint); text-align: center; }
+.choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.choice { position: relative; }
+.choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.choice span { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; font-size: .86rem; font-weight: 600; background: var(--surface); }
+.choice input:checked + span { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.choice input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.choice.hot input:checked + span { background: var(--hot); color: var(--hot-ink); border-color: var(--hot); }
+.swatch { width: 12px; height: 12px; border-radius: 50%; background: var(--th); }
+.upload { display: grid; grid-template-columns: 88px 1fr; gap: 12px; align-items: center; }
+.upload .ph { border-radius: 16px; }
+.upload .ph svg { width: 40%; height: 40%; }
+.upload-btn { position: relative; display: inline-flex; border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; font-weight: 700; font-size: .88rem; cursor: pointer; justify-self: start; }
+.upload-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.toggle { display: flex; gap: 10px; align-items: start; font-size: .9rem; cursor: pointer; }
+.toggle input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--btn); flex: none; }
+.toggle small { display: block; color: var(--faint); }
+
+.th-hero { border-radius: 22px; padding: 18px; background: var(--th-tint); position: relative; overflow: hidden; display: grid; gap: 6px; }
+.th-hero h2 { color: var(--th); font-family: var(--f-display); font-weight: 700; }
+.th-hero p { margin: 0; color: var(--ink); max-width: 46ch; }
+.th-hero.flag::after { content: ""; position: absolute; right: 0; top: 0; width: 70px; height: 70px; background: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 14px 14px; -webkit-mask: linear-gradient(225deg, #000 35%, transparent 70%); mask: linear-gradient(225deg, #000 35%, transparent 70%); opacity: .85; }
+.mini { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mini button { width: 100%; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; }
+.mini .ph { border-radius: 14px; }
+.mini .ph svg.ill { width: 78%; height: 78%; }
+.mini .t { font-weight: 600; font-size: .9rem; line-height: 1.25; min-width: 0; }
+.mini .t small { display: block; color: var(--faint); font-weight: 600; }
+.mini .p { font-weight: 800; font-variant-numeric: tabular-nums; font-size: .9rem; white-space: nowrap; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--btn); color: var(--btn-ink); font-weight: 700; font-size: .9rem; padding: 11px 18px; border-radius: 999px; max-width: calc(100% - 32px); text-align: center; z-index: 50; }
+@media (max-width: 420px) { .row2 { grid-template-columns: 1fr; } .grid { gap: 18px 10px; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="mock">
+  <div class="wrap">
+    <div class="mock-label"><b>Макет</b> · маркет на основе варианта B. Фото — заглушки, всё кликается.</div>
+    <div class="seg" aria-label="Чья версия">
+      <button type="button" data-role="owner">Моя версия</button>
+      <button type="button" data-role="friend">Для друзей</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="app" id="app"></div>
+  <section class="how">
+    <h2>Что изменилось</h2>
+    <ul>
+      <li><b>Фото.</b> На настоящем сайте фото подтянется само по ссылке на товар. Можно загрузить и своё: в «Моей версии» нажми «Добавить желание».</li>
+      <li><b>«Очень хочу»</b> выделено розовой рамкой и плашкой и всегда стоит первым.</li>
+      <li><b>«Можно несколько».</b> Такие желания бронирует сколько угодно друзей, например кофе или модельки. Остальные бронирует только один человек.</li>
+      <li><b>Тематики.</b> Под тему подходит что угодно, а не только идеи из списка. Друг пишет «дарю кепку McLaren», чтобы остальные не повторились. Ты таких записей не видишь.</li>
+    </ul>
+  </section>
+</div>
+
+<dialog class="sheet" id="sheet" aria-label="Подробности"></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* ---------- illustrations (placeholders for product photos) ---------- */
+const keyRects = (() => {
+  let s = '';
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 11; c++) {
+    if (r === 3 && c > 2 && c < 8) continue;
+    const accent = (r === 0 && c === 0) || (r === 3 && c === 10);
+    s += `<rect x="${13 + c * 9}" y="${45 + r * 10}" width="7" height="8" rx="1.5" fill="${accent ? '#f08a3c' : '#e9e7e2'}"/>`;
+  }
+  return s + `<rect x="40" y="75" width="43" height="8" rx="1.5" fill="#e9e7e2"/>`;
+})();
+const flagRects = (x0, y0, cols, rows, size) => {
+  let s = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) s += `<rect x="${x0 + c * size}" y="${y0 + r * size}" width="${size}" height="${size}" fill="${(r + c) % 2 ? '#ffffff' : '#1b1b1f'}"/>`;
+  return s;
+};
+const svg = (body) => `<svg class="ill" viewBox="0 0 120 120" aria-hidden="true">${body}</svg>`;
+const car = (c) => svg(`<path d="M10 78 L28 71 L50 69 L58 60 L72 59 L79 69 L100 70 L104 60 L114 60 L114 79 L10 81 Z" fill="${c}"/><rect x="102" y="56" width="13" height="5" rx="1" fill="#1f1f22"/><rect x="6" y="74" width="10" height="4" rx="1" fill="#1f1f22"/><circle cx="65" cy="62" r="4.5" fill="#f4f4f4"/><circle cx="30" cy="81" r="11" fill="#1f1f22"/><circle cx="30" cy="81" r="4" fill="#8a8a90"/><circle cx="95" cy="81" r="12" fill="#1f1f22"/><circle cx="95" cy="81" r="4.5" fill="#8a8a90"/>`);
+const ILL = {
+  headphones: () => svg(`<path d="M28 70V56a32 32 0 0 1 64 0v14" fill="none" stroke="#3a3e48" stroke-width="7" stroke-linecap="round"/><rect x="17" y="60" width="24" height="38" rx="11" fill="#262931"/><rect x="79" y="60" width="24" height="38" rx="11" fill="#262931"/><rect x="24" y="67" width="10" height="24" rx="5" fill="#4b505d"/><rect x="86" y="67" width="10" height="24" rx="5" fill="#4b505d"/>`),
+  grinder: () => svg(`<path d="M60 36V24h26" fill="none" stroke="#2d2f33" stroke-width="4" stroke-linecap="round"/><circle cx="88" cy="24" r="7" fill="#9b6a47"/><rect x="42" y="34" width="36" height="10" rx="3" fill="#2d2f33"/><rect x="44" y="44" width="32" height="54" rx="5" fill="#a9afb6"/><rect x="44" y="68" width="32" height="3" fill="#878d95"/><rect x="44" y="90" width="32" height="8" rx="3" fill="#2d2f33"/>`),
+  keyboard: () => svg(`<rect x="8" y="40" width="104" height="48" rx="8" fill="#30333b"/>${keyRects}`),
+  book: () => svg(`<rect x="34" y="20" width="54" height="80" rx="3" fill="#e9b949"/><rect x="34" y="20" width="8" height="80" fill="#c8962a"/><rect x="50" y="34" width="30" height="5" rx="2" fill="#26262a"/><rect x="50" y="44" width="22" height="4" rx="2" fill="#26262a" opacity=".55"/><path d="M53 80h22l-3 8H56z M57 72a7 7 0 0 1 14 0v8H57z" fill="none" stroke="#26262a" stroke-width="2.5" stroke-linejoin="round"/>`),
+  ticket: () => svg(`<rect x="12" y="34" width="96" height="54" rx="9" fill="#ffffff" stroke="#d6d6dc"/>${flagRects(21, 43, 4, 6, 6)}<line x1="52" y1="40" x2="52" y2="82" stroke="#d6d6dc" stroke-dasharray="3 3"/><text x="60" y="60" font-family="Unbounded, sans-serif" font-weight="700" font-size="10" fill="#d7322a">КАРТИНГ</text><text x="60" y="74" font-family="Manrope, sans-serif" font-weight="700" font-size="8" fill="#55555c">заезд на двоих</text>`),
+  tumbler: () => svg(`<path d="M40 30h40l-5 70a6 6 0 0 1-6 5H51a6 6 0 0 1-6-5z" fill="#5e8f78"/><rect x="37" y="22" width="46" height="10" rx="4" fill="#2f3a35"/><path d="M80 46h7a7 7 0 0 1 7 7v16a7 7 0 0 1-7 7h-9" fill="none" stroke="#4d7a65" stroke-width="6" stroke-linecap="round"/><rect x="46" y="40" width="5" height="50" rx="2.5" fill="#ffffff" opacity=".25"/>`),
+  lego: () => car('#ff8a1f'),
+  models: () => svg(`<g transform="translate(-2 -14) scale(.62)">${car('#d7322a').replace(/<\/?svg[^>]*>/g, '')}</g><g transform="translate(44 34) scale(.62)">${car('#1f6fd1').replace(/<\/?svg[^>]*>/g, '')}</g><g transform="translate(6 56) scale(.62)">${car('#1d9e6a').replace(/<\/?svg[^>]*>/g, '')}</g>`),
+  beans: () => svg(`<path d="M38 32h44l6 68H32z" fill="#c9a274"/><rect x="38" y="24" width="44" height="10" rx="2" fill="#a77e52"/><rect x="44" y="52" width="32" height="30" rx="3" fill="#f6f1e8"/><ellipse cx="60" cy="67" rx="7" ry="10" fill="#5b3a24"/><path d="M60 58q-4 9 0 18" stroke="#f6f1e8" stroke-width="2" fill="none"/>`),
+};
+const ICON = {
+  multi: '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="4.5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 2.5h6.5a2 2 0 0 1 2 2V11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  photo: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
+};
+
+/* ---------- example data ---------- */
+const PRI = { 3: 'Очень хочу', 2: 'Хочу', 1: 'Было бы неплохо' };
+const COLORS = { red: 'красный', brown: 'коричневый', blue: 'синий', green: 'зелёный' };
+const state = {
+  role: 'friend', filter: 'all', sheet: null, myName: '', draftPhoto: null, nextId: 100,
+  params: [
+    { k: 'Одежда', v: 'M / 48' }, { k: 'Обувь', v: '43' },
+    { k: 'Цвета', v: 'тёмно-зелёный, графит' }, { k: 'Не дарить', v: 'парфюм, сувениры' },
+  ],
+  themes: [
+    { id: 'kart', name: 'Картинг и F1', color: 'red', flag: true,
+      desc: 'Что угодно про F1 и картинг: модельки болидов, мерч команд, книги о гонках, перчатки, заезды.',
+      notes: [{ by: 'Лёша', text: 'Дарю кепку McLaren', mine: false }] },
+    { id: 'coffee', name: 'Кофе', color: 'brown',
+      desc: 'Зерно для фильтра, всё для пуровера, необычные чашки.', notes: [] },
+    { id: 'desk', name: 'Рабочее место', color: 'blue',
+      desc: 'Всё, что делает стол удобнее: свет, подставки, органайзеры, коврики.', notes: [] },
+  ],
+  items: [
+    { id: 1, title: 'Наушники Sony WH-1000XM5', url: 'https://market.yandex.ru/search?text=Sony%20WH-1000XM5', price: 32990, pri: 3, multi: false, themes: ['desk'], ill: 'headphones', note: 'Чёрные или серебристые, без разницы.',
+      res: [{ by: 'Аня', note: 'Беру. Если кто-то хочет скинуться, напишите мне', mine: false }] },
+    { id: 2, title: 'LEGO Technic McLaren Formula 1', url: 'https://www.ozon.ru/search/?text=LEGO%20Technic%20McLaren%20F1', price: 18990, pri: 3, multi: false, themes: ['kart'], ill: 'lego', res: [] },
+    { id: 3, title: 'Ручная кофемолка Timemore C3', url: 'https://www.ozon.ru/search/?text=Timemore%20C3', price: 7490, pri: 3, multi: false, themes: ['coffee'], ill: 'grinder', res: [] },
+    { id: 4, title: 'Клавиатура Keychron K2, коричневые свитчи', url: 'https://www.ozon.ru/search/?text=Keychron%20K2', price: 9900, pri: 2, multi: false, themes: ['desk'], ill: 'keyboard', res: [] },
+    { id: 5, title: 'Сертификат на картинг на двоих', url: 'https://yandex.ru/search/?text=картинг%20сертификат', price: 3500, pri: 2, multi: false, themes: ['kart'], ill: 'ticket',
+      res: [{ by: 'Миша', note: '', mine: false }] },
+    { id: 6, title: 'Зерновой кофе для фильтра', url: 'https://www.ozon.ru/search/?text=кофе%20в%20зернах%20для%20фильтра', price: 1200, pri: 2, multi: true, themes: ['coffee'], ill: 'beans', note: 'Светлая обжарка, Эфиопия или Кения.',
+      res: [{ by: 'Катя', note: 'Привезу пачку из Питера', mine: false }] },
+    { id: 7, title: 'Модельки болидов F1, масштаб 1:43', url: 'https://www.ozon.ru/search/?text=модель%20болида%20F1%201:43', price: 2500, pri: 1, multi: true, themes: ['kart'], ill: 'models', note: 'Любые команды, кроме Ferrari: она уже есть.', res: [] },
+    { id: 8, title: 'Книга «Дизайн привычных вещей», Дон Норман', url: 'https://www.labirint.ru/search/Дизайн привычных вещей/', price: 1290, pri: 1, multi: false, themes: [], ill: 'book', res: [] },
+    { id: 9, title: 'Термокружка Stanley 0,47 л', url: 'https://www.wildberries.ru/catalog/0/search.aspx?search=Stanley%20термокружка', price: 3200, pri: 1, multi: false, themes: ['coffee'], ill: 'tumbler', res: [] },
+  ],
+};
+
+/* ---------- helpers ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = (n) => (n || n === 0) ? new Intl.NumberFormat('ru-RU').format(n) + ' ₽' : 'Цена не указана';
+const domain = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c); };
+const friend = () => state.role === 'friend';
+const theme = (id) => state.themes.find((t) => t.id === id);
+const item = (id) => state.items.find((i) => i.id === id);
+const taken = (it) => !it.multi && it.res.length > 0;
+const sorted = (list) => [...list].sort((a, b) => b.pri - a.pri || (b.price || 0) - (a.price || 0));
+const photo = (it) => it.photo ? `<img src="${it.photo}" alt="">` : (ILL[it.ill] ? ILL[it.ill]() : `<span class="letter">${esc(it.title.charAt(0))}</span>`);
+
+function visibleItems() {
+  const f = state.filter;
+  let list = state.items;
+  if (f === 'hot') list = list.filter((i) => i.pri === 3);
+  else if (f === 'multi') list = list.filter((i) => i.multi);
+  else if (f.startsWith('th:')) list = list.filter((i) => i.themes.includes(f.slice(3)));
+  return sorted(list);
+}
+
+/* ---------- main view ---------- */
+function tile(it) {
+  const showTaken = friend() && taken(it);
+  const multiLabel = friend() && it.multi && it.res.length ? `Несколько · дарят ${it.res.length}` : 'Можно несколько';
+  return `<button class="tile p${it.pri} ${showTaken ? 'is-res' : ''}" type="button" data-open="item" data-id="${it.id}">
+    <span class="ph">${photo(it)}
+      ${it.pri === 3 ? '<span class="b-hot">Очень хочу</span>' : ''}
+      ${it.multi ? `<span class="b-multi">${ICON.multi}${multiLabel}</span>` : ''}
+      ${showTaken ? '<span class="res-cover"><span>Забронировано</span></span>' : ''}
+    </span>
+    <span class="tile-title">${esc(it.title)}</span>
+    <span class="tile-price">${money(it.price)}${it.url ? `<small>${esc(domain(it.url))}</small>` : ''}</span>
+  </button>`;
+}
+
+function themeCard(t) {
+  const n = state.items.filter((i) => i.themes.includes(t.id)).length;
+  return `<button class="theme th-${t.color} ${t.flag ? 'flag' : ''}" type="button" data-open="theme" data-id="${t.id}">
+    <h3>${esc(t.name)}</h3><p>${esc(t.desc)}</p>
+    <span class="meta">${n} ${plural(n, 'идея', 'идеи', 'идей')} + что угодно по теме${friend() && t.notes.length ? `<span>дарят: ${t.notes.length}</span>` : ''}</span>
+  </button>`;
+}
+
+function render() {
+  document.querySelectorAll('[data-role]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.role === state.role)));
+  const items = visibleItems();
+  const free = state.items.filter((i) => !taken(i)).length;
+  const chips = [
+    ['all', 'Все', state.items.length],
+    ['hot', '<span class="dot"></span>Очень хочу', state.items.filter((i) => i.pri === 3).length],
+    ['multi', 'Можно несколько', state.items.filter((i) => i.multi).length],
+    ...state.themes.map((t) => ['th:' + t.id, esc(t.name), state.items.filter((i) => i.themes.includes(t.id)).length]),
+  ];
+  $('#app').innerHTML = `
+    <header class="head">
+      <div class="head-row">
+        <h1>Вишлист Димы</h1>
+        ${friend() ? '' : `<button class="round" type="button" data-act="share" aria-label="Скопировать ссылку для друзей" title="Ссылка для друзей">${ICON.share}</button>`}
+      </div>
+      <p class="head-sub">${friend()
+        ? `Выбирай и бронируй, чтобы подарки не повторились. Дима не узнает, кто что выбрал. Свободно ${free} из ${state.items.length}.`
+        : 'Твоя версия. Брони друзей скрыты, сюрприз не испортится. Добавляй желания и тематики.'}</p>
+      <ul class="params">${state.params.map((p) => `<li><span>${esc(p.k)}</span><b>${esc(p.v)}</b></li>`).join('')}</ul>
+    </header>
+
+    <section>
+      <div class="sec-h"><h2>Тематики</h2><p>Подойдёт что угодно по теме</p></div>
+      <div class="rail">${state.themes.map(themeCard).join('')}
+        ${friend() ? '' : `<button class="theme new" type="button" data-open="new-theme"><span class="plus">+</span>Новая тематика</button>`}
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-h"><h2>Желания</h2></div>
+      <nav class="filters" aria-label="Фильтр">${chips.map(([k, label, n]) => `<button class="chip" type="button" data-filter="${k}" aria-pressed="${state.filter === k}">${label}<small>${n}</small></button>`).join('')}</nav>
+      <div class="grid">
+        ${friend() ? '' : `<button class="tile add" type="button" data-open="new-item"><span class="ph"><div><span class="plus">+</span>Добавить желание</div></span></button>`}
+        ${items.map(tile).join('') || (friend() ? '<p class="empty">Здесь пока пусто.</p>' : '')}
+      </div>
+    </section>`;
+  renderSheet();
+}
+
+/* ---------- sheets ---------- */
+const sheetTop = (kicker) => `<div class="sheet-top"><span class="kicker">${kicker}</span><button class="round sm" type="button" data-act="close" aria-label="Закрыть">${ICON.close}</button></div>`;
+const initial = (s) => esc((s || '?').trim().charAt(0).toUpperCase());
+
+function reserveBlock(it) {
+  const mineRes = it.res.find((r) => r.mine);
+  const list = it.res.length ? `<ul class="people">${it.res.map((r, i) => `<li><span class="ava">${initial(r.by)}</span><div><div class="who">${r.mine ? 'Ты' : esc(r.by)}</div>${r.note ? `<div class="txt">${esc(r.note)}</div>` : ''}${r.mine ? `<button class="linkbtn" type="button" data-act="unreserve" data-id="${it.id}" data-idx="${i}">Снять бронь</button>` : ''}</div></li>`).join('')}</ul>` : '';
+  if (taken(it)) return `<div class="box"><h3>Уже забронировано</h3>${list}</div>`;
+  const form = mineRes ? '' : `<form class="form" data-form="reserve" data-id="${it.id}">
+      <div class="field"><label for="r-name">Твоё имя</label><input type="text" id="r-name" required maxlength="40" value="${esc(state.myName)}" placeholder="Например, Катя"></div>
+      <div class="field"><label for="r-note">Комментарий для других друзей</label><textarea id="r-note" maxlength="300" placeholder="${it.multi ? 'Что именно подаришь' : 'Беру сам / давайте скинемся'}"></textarea></div>
+      <button class="btn wide" type="submit">${it.multi && it.res.length ? 'Я тоже подарю' : 'Забронировать'}</button>
+      <p class="small-note">Дима не увидит, кто и что забронировал.</p>
+    </form>`;
+  return `<div class="box">${it.multi ? `<h3>${it.res.length ? `Уже дарят: ${it.res.length}` : 'Можно подарить нескольким'}</h3>${list}` : ''}${form}</div>`;
+}
+
+function itemSheet(it) {
+  const ths = it.themes.map(theme).filter(Boolean);
+  return `${sheetTop(friend() ? 'Желание' : 'Твоё желание')}
+    <div class="ph sheet-ph p${it.pri}">${photo(it)}${it.multi ? `<span class="b-multi">${ICON.multi}Можно несколько</span>` : ''}</div>
+    <div class="pills"><span class="pill ${it.pri === 3 ? 'hot' : ''}">${PRI[it.pri]}</span>${ths.map((t) => `<button class="pill th th-${t.color}" type="button" data-open="theme" data-id="${t.id}">${esc(t.name)}</button>`).join('')}</div>
+    <h2>${esc(it.title)}</h2>
+    <div class="price-row"><span class="price-big">${money(it.price)}</span>${it.url ? `<a class="shop-link" href="${esc(it.url)}" target="_blank" rel="noopener">Открыть на ${esc(domain(it.url))} ↗</a>` : ''}</div>
+    ${it.note ? `<p class="note"><span>Комментарий Димы</span>${esc(it.note)}</p>` : ''}
+    ${friend() ? reserveBlock(it) : `<p class="small-note" style="text-align:left">Брони друзей здесь не показываются.</p><button class="linkbtn danger" type="button" data-act="delete-item" data-id="${it.id}">Удалить желание</button>`}`;
+}
+
+function themeSheet(t) {
+  const its = sorted(state.items.filter((i) => i.themes.includes(t.id)));
+  const notes = `<ul class="people">${t.notes.map((n, i) => `<li><span class="ava">${initial(n.by)}</span><div><div class="who">${n.mine ? 'Ты' : esc(n.by)}</div><div class="txt">${esc(n.text)}</div>${n.mine ? `<button class="linkbtn" type="button" data-act="unnote" data-id="${t.id}" data-idx="${i}">Убрать</button>` : ''}</div></li>`).join('')}</ul>`;
+  return `${sheetTop('Тематика')}
+    <div class="th-hero th-${t.color} ${t.flag ? 'flag' : ''}"><h2>${esc(t.name)}</h2><p>${esc(t.desc)}</p></div>
+    ${its.length ? `<div class="box"><h3>Идеи из списка</h3><ul class="mini">${its.map((i) => `<li><button type="button" data-open="item" data-id="${i.id}"><span class="ph p${i.pri}">${photo(i)}</span><span class="t">${esc(i.title)}<small>${i.pri === 3 ? 'очень хочу' : PRI[i.pri].toLowerCase()}${friend() && taken(i) ? ' · забронировано' : ''}${i.multi ? ' · можно несколько' : ''}</small></span><span class="p">${money(i.price)}</span></button></li>`).join('')}</ul></div>` : ''}
+    ${friend() ? `<div class="box th-${t.color}"><h3>Подарю что-то своё по теме</h3>
+      ${t.notes.length ? notes : '<p class="small-note" style="text-align:left">Пока никто не отметился. Напиши, что даришь, чтобы другие не повторились.</p>'}
+      <form class="form" data-form="note" data-id="${t.id}">
+        <div class="field"><label for="n-name">Твоё имя</label><input type="text" id="n-name" required maxlength="40" value="${esc(state.myName)}"></div>
+        <div class="field"><label for="n-text">Что подаришь</label><input type="text" id="n-text" required maxlength="140" placeholder="Например, перчатки для картинга"></div>
+        <button class="btn wide" type="submit">Отметить</button>
+        <p class="small-note">Дима этого не увидит.</p>
+      </form></div>`
+    : `<p class="small-note" style="text-align:left">Друзья могут отметить, что дарят что-то своё по этой теме. Тебе эти отметки не видны.</p><button class="linkbtn danger" type="button" data-act="delete-theme" data-id="${t.id}">Удалить тематику</button>`}`;
+}
+
+function newItemSheet() {
+  return `${sheetTop('Новое желание')}
+    <form class="form" data-form="new-item">
+      <div class="upload"><span class="ph" id="draft-ph">${state.draftPhoto ? `<img src="${state.draftPhoto}" alt="">` : ICON.photo}</span>
+        <div class="field"><span class="lbl">Фото</span><label class="upload-btn">Загрузить фото<input type="file" id="f-photo" accept="image/*"></label><small style="color:var(--faint)">Или оставь пустым: на сайте фото подтянется по ссылке</small></div></div>
+      <div class="field"><label for="f-title">Название</label><input type="text" id="f-title" required maxlength="120" placeholder="Что хочется"></div>
+      <div class="field"><label for="f-url">Ссылка</label><input type="url" id="f-url" placeholder="https://"></div>
+      <div class="row2">
+        <div class="field"><label for="f-price">Цена, ₽</label><input type="number" id="f-price" min="0" step="1" inputmode="numeric"></div>
+        <div class="field"><span class="lbl">Приоритет</span><div class="choices">
+          <label class="choice hot"><input type="radio" name="f-pri" value="3"><span>Очень хочу</span></label>
+          <label class="choice"><input type="radio" name="f-pri" value="2" checked><span>Хочу</span></label>
+          <label class="choice"><input type="radio" name="f-pri" value="1"><span>Неплохо бы</span></label></div></div>
+      </div>
+      <label class="toggle"><input type="checkbox" id="f-multi"><span>Можно больше, чем один<small>Бронировать смогут несколько друзей</small></span></label>
+      ${state.themes.length ? `<div class="field"><span class="lbl">Тематики</span><div class="choices">${state.themes.map((t) => `<label class="choice th-${t.color}"><input type="checkbox" name="f-th" value="${t.id}"><span><i class="swatch"></i>${esc(t.name)}</span></label>`).join('')}</div></div>` : ''}
+      <div class="field"><label for="f-note">Комментарий для друзей</label><textarea id="f-note" maxlength="300" placeholder="Размер, цвет, что точно не подойдёт"></textarea></div>
+      <button class="btn wide" type="submit">Добавить</button>
+    </form>`;
+}
+
+function newThemeSheet() {
+  return `${sheetTop('Новая тематика')}
+    <form class="form" data-form="new-theme">
+      <div class="field"><label for="t-name">Название</label><input type="text" id="t-name" required maxlength="40" placeholder="Например, Настолки"></div>
+      <div class="field"><label for="t-desc">Что подойдёт</label><textarea id="t-desc" maxlength="200" placeholder="Любые кооперативные игры, дополнения к «Каркассону»"></textarea></div>
+      <div class="field"><span class="lbl">Цвет</span><div class="choices">${Object.entries(COLORS).map(([k, v], i) => `<label class="choice th-${k}"><input type="radio" name="t-color" value="${k}" ${i === 3 ? 'checked' : ''}><span><i class="swatch"></i>${v}</span></label>`).join('')}</div></div>
+      <button class="btn wide" type="submit">Создать</button>
+    </form>`;
+}
+
+const sheet = $('#sheet');
+function renderSheet() {
+  const s = state.sheet;
+  if (!s) { if (sheet.open) sheet.close(); return; }
+  let html = '';
+  if (s.type === 'item') { const it = item(s.id); if (!it) { state.sheet = null; return renderSheet(); } html = itemSheet(it); }
+  if (s.type === 'theme') { const t = theme(s.id); if (!t) { state.sheet = null; return renderSheet(); } html = themeSheet(t); }
+  if (s.type === 'new-item') html = newItemSheet();
+  if (s.type === 'new-theme') html = newThemeSheet();
+  sheet.innerHTML = `<div class="sheet-in">${html}</div>`;
+  if (!sheet.open) sheet.showModal();
+  sheet.scrollTop = 0;
+}
+function openSheet(type, id) {
+  if (type === 'new-item') state.draftPhoto = null;
+  state.sheet = { type, id }; renderSheet();
+}
+sheet.addEventListener('close', () => { state.sheet = null; });
+sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
+
+/* ---------- events ---------- */
+let toastTimer;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2800); }
+
+document.addEventListener('click', (e) => {
+  const roleBtn = e.target.closest('[data-role]');
+  if (roleBtn) { state.role = roleBtn.dataset.role; state.filter = 'all'; state.sheet = null; render(); history.replaceState(null, '', '#' + state.role); return; }
+  const f = e.target.closest('[data-filter]');
+  if (f) { state.filter = f.dataset.filter; render(); return; }
+  const o = e.target.closest('[data-open]');
+  if (o) { const id = o.dataset.id; openSheet(o.dataset.open, o.dataset.open === 'item' ? Number(id) : id); return; }
+  const a = e.target.closest('[data-act]');
+  if (!a) return;
+  const act = a.dataset.act, idx = Number(a.dataset.idx);
+  if (act === 'close') sheet.close();
+  if (act === 'unreserve') { item(Number(a.dataset.id)).res.splice(idx, 1); render(); toast('Бронь снята'); }
+  if (act === 'unnote') { theme(a.dataset.id).notes.splice(idx, 1); render(); toast('Отметка убрана'); }
+  if (act === 'delete-item') { state.items = state.items.filter((i) => i.id !== Number(a.dataset.id)); state.sheet = null; render(); toast('Желание удалено'); }
+  if (act === 'delete-theme') {
+    const id = a.dataset.id;
+    state.themes = state.themes.filter((t) => t.id !== id);
+    state.items.forEach((i) => { i.themes = i.themes.filter((x) => x !== id); });
+    if (state.filter === 'th:' + id) state.filter = 'all';
+    state.sheet = null; render(); toast('Тематика удалена');
+  }
+  if (act === 'share') {
+    const url = 'https://wish.example/f/k7q2x9';
+    const ok = () => toast('Ссылка для друзей скопирована');
+    try { navigator.clipboard.writeText(url).then(ok, () => toast('Ссылка для друзей: ' + url)); } catch { toast('Ссылка для друзей: ' + url); }
+  }
+});
+
+document.addEventListener('change', (e) => {
+  if (e.target.id !== 'f-photo') return;
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => { state.draftPhoto = r.result; const ph = $('#draft-ph'); if (ph) ph.innerHTML = `<img src="${r.result}" alt="">`; };
+  r.readAsDataURL(file);
+});
+
+document.addEventListener('submit', (e) => {
+  const f = e.target.closest('form[data-form]');
+  if (!f) return;
+  e.preventDefault();
+  const v = (id) => (document.getElementById(id)?.value || '').trim();
+  const kind = f.dataset.form;
+  if (kind === 'reserve') {
+    const it = item(Number(f.dataset.id)); const name = v('r-name'); if (!it || !name) return;
+    state.myName = name; it.res.push({ by: name, note: v('r-note'), mine: true });
+    render(); toast(it.multi ? 'Записали тебя. Дима не узнает' : 'Забронировано. Дима не узнает');
+  }
+  if (kind === 'note') {
+    const t = theme(f.dataset.id); const name = v('n-name'); const text = v('n-text'); if (!t || !name || !text) return;
+    state.myName = name; t.notes.push({ by: name, text, mine: true });
+    render(); toast('Отметили. Остальные увидят, Дима нет');
+  }
+  if (kind === 'new-item') {
+    const title = v('f-title'); if (!title) return;
+    const price = v('f-price');
+    state.items.push({
+      id: state.nextId++, title, url: v('f-url'), price: price === '' ? null : Number(price),
+      pri: Number(f.querySelector('[name="f-pri"]:checked')?.value || 2), multi: $('#f-multi').checked,
+      themes: [...f.querySelectorAll('[name="f-th"]:checked')].map((x) => x.value), note: v('f-note'),
+      photo: state.draftPhoto, ill: null, res: [],
+    });
+    state.draftPhoto = null; state.sheet = null; state.filter = 'all'; render(); toast('Желание добавлено');
+  }
+  if (kind === 'new-theme') {
+    const name = v('t-name'); if (!name) return;
+    state.themes.push({ id: 't' + state.nextId++, name, desc: v('t-desc') || 'Что угодно по теме.', color: f.querySelector('[name="t-color"]:checked')?.value || 'green', notes: [] });
+    state.sheet = null; render(); toast('Тематика создана');
+  }
+});
+
+const h = location.hash.slice(1);
+if (h === 'owner' || h === 'friend') state.role = h;
+window.addEventListener('hashchange', () => { const x = location.hash.slice(1); if (x === 'owner' || x === 'friend') { state.role = x; render(); } });
+render();
+</script>

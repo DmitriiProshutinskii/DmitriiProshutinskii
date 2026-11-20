@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <title>Вишлист</title>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="claude:viewport-fit-sides" content="cover">
+    <script>
+      // Pick light/dark before first paint: explicit data-theme wins, otherwise the OS setting.
+      (function () {
+        var r = document.documentElement, t = r.getAttribute("data-theme");
+        var dark = t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        r.classList.toggle("dark", dark);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
