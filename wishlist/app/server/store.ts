@@ -33,6 +33,8 @@ export interface StoredWish {
   photo: string | null
   /** Drawing shown when there is no photo (starter wishes for services). */
   illustration?: string | null
+  /** No longer needed, with the owner's reason («Купил», «Починил»). */
+  done?: string | null
   createdAt: string
   reservations: StoredReservation[]
 }

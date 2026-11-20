@@ -1,8 +1,8 @@
-import { Check, Layers, Plus } from "lucide-react"
+import { Check, CircleCheck, Layers, Plus } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { WishPhoto } from "@/components/wish/wish-photo"
-import { domainOf, formatPrice, isTaken } from "@/lib/format"
+import { domainOf, formatPrice, isDone, isTaken } from "@/lib/format"
 import type { Role, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -11,10 +11,13 @@ const tileButton =
 
 export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpen: () => void }) {
   const friend = role === "friend"
-  const hot = wish.priority === 3
-  const mine = friend && wish.reservations.some((r) => r.mine)
+  // No longer needed («Купил», «Починил»): greyed out like a sold-out item in a shop.
+  const done = isDone(wish)
+  const hot = wish.priority === 3 && !done
+  const mine = friend && !done && wish.reservations.some((r) => r.mine)
   // Someone else took it. Your own reservation is shown differently, so you can find it again.
-  const takenByOther = friend && isTaken(wish) && !mine
+  const takenByOther = friend && !done && isTaken(wish) && !mine
+  const muted = done || takenByOther
   const givers = wish.reservations.length
   const domain = domainOf(wish.url)
 
@@ -32,13 +35,13 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
           mine && "after:ring-mine after:ring-[3px] after:ring-inset"
         )}
       >
-        <WishPhoto wish={wish} className={cn(takenByOther && "opacity-50 grayscale")} />
+        <WishPhoto wish={wish} className={cn(muted && "opacity-50 grayscale")} />
         {hot && (
           <Badge variant="hot" className="absolute top-2.5 left-2.5">
             Очень хочу
           </Badge>
         )}
-        {wish.multi && (
+        {wish.multi && !done && (
           <Badge
             variant="outline"
             className={cn("absolute bottom-2.5 left-2.5 border-transparent shadow-sm", mine && "bg-mine text-mine-foreground")}
@@ -52,6 +55,14 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
             <Badge className="px-3 py-1">Забронировано</Badge>
           </div>
         )}
+        {done && (
+          <div className="bg-scrim absolute inset-0 grid place-items-center">
+            <Badge variant="outline" className="max-w-[90%] truncate px-3 py-1">
+              <CircleCheck />
+              {wish.done}
+            </Badge>
+          </div>
+        )}
         {mine && !wish.multi && (
           <Badge className="bg-mine text-mine-foreground absolute bottom-2.5 left-2.5 px-2.5 py-1">
             <Check />
@@ -59,14 +70,14 @@ export function WishTile({ wish, role, onOpen }: { wish: Wish; role: Role; onOpe
           </Badge>
         )}
       </div>
-      <div className={cn("line-clamp-2 px-1 text-[15px] leading-snug font-semibold", takenByOther && "text-muted-foreground")}>
+      <div className={cn("line-clamp-2 px-1 text-[15px] leading-snug font-semibold", muted && "text-muted-foreground")}>
         {wish.title}
       </div>
       <div className="grid gap-0.5 px-1">
         {wish.price === null ? (
           <span className="text-muted-foreground text-[13px] font-medium">Цена не указана</span>
         ) : (
-          <span className={cn("text-[15px] font-bold tabular-nums", takenByOther && "text-muted-foreground")}>
+          <span className={cn("text-[15px] font-bold tabular-nums", muted && "text-muted-foreground", done && "line-through")}>
             {formatPrice(wish.price, wish.currency)}
           </span>
         )}

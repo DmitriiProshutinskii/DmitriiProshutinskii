@@ -62,6 +62,10 @@ export function demoBackend(role: Role): Backend {
       Object.assign(findWish(wishId), input)
       return done()
     },
+    setDone: (wishId, label) => {
+      findWish(wishId).done = label
+      return done()
+    },
     deleteWish: (wishId) => {
       db.wishes = db.wishes.filter((w) => w.id !== wishId)
       return done()
@@ -94,6 +98,7 @@ export function demoBackend(role: Role): Backend {
     preview: async () => ({}),
     reserve: (wishId, by, note) => {
       const w = findWish(wishId)
+      if (w.done) throw new ApiError(409, "already_done")
       if (!w.multi && w.reservations.length) throw new ApiError(409, "already_taken")
       w.reservations.push({ id: id(), by, note, mine: true })
       return done()

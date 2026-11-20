@@ -42,5 +42,14 @@ export const plural = (n: number, one: string, few: string, many: string) => {
 /** A single-gift wish is taken once anyone reserves it; multi-gift wishes never are. */
 export const isTaken = (w: Wish) => !w.multi && w.reservations.length > 0
 
-/** Highest priority first; within a priority, the order the owner added them (Array.sort is stable). */
-export const byPriority = (a: Wish, b: Wish) => b.priority - a.priority
+/** No longer needed: the owner bought it, fixed the old one, etc. */
+export const isDone = (w: Wish) => !!w.done
+
+/** Reasons offered when the owner marks a wish as no longer needed. */
+export const DONE_PRESETS = ["Купил", "Подарили", "Починил", "Передумал"]
+
+/**
+ * Wishes still wanted first, highest priority first; within a priority, the order the owner added them
+ * (Array.sort is stable). Finished ones go last.
+ */
+export const byPriority = (a: Wish, b: Wish) => Number(isDone(a)) - Number(isDone(b)) || b.priority - a.priority

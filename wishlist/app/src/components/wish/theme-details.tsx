@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { ConfirmButton } from "@/components/wish/confirm-button"
 import { PeopleList } from "@/components/wish/people-list"
 import { WishPhoto } from "@/components/wish/wish-photo"
-import { PRIORITY_LABEL, byPriority, formatPrice, isTaken } from "@/lib/format"
+import { PRIORITY_LABEL, byPriority, formatPrice, isDone, isTaken } from "@/lib/format"
 import type { Role, Theme, Wish } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { SheetFooter } from "@/components/wish/responsive-sheet"
@@ -61,18 +61,26 @@ export function ThemeDetails({ theme, wishes, role, ownerName, myName, onOpenWis
                     onClick={() => onOpenWish(w.id)}
                     className="hover:bg-muted grid w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-lg p-2 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
-                    <span className={cn("bg-tile relative grid aspect-square place-items-center overflow-hidden rounded-lg after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-['']", w.priority === 3 && "bg-hot-soft after:ring-2 after:ring-inset after:ring-hot", w.photo && "bg-white")}>
-                      <WishPhoto wish={w} className="size-[80%]" />
+                    <span className={cn("bg-tile relative grid aspect-square place-items-center overflow-hidden rounded-lg after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:content-['']", w.priority === 3 && !isDone(w) && "bg-hot-soft after:ring-2 after:ring-inset after:ring-hot", w.photo && "bg-white")}>
+                      <WishPhoto wish={w} className={cn("size-[80%]", isDone(w) && "opacity-50 grayscale")} />
                     </span>
-                    <span className="min-w-0 text-sm leading-tight font-semibold">
+                    <span className={cn("min-w-0 text-sm leading-tight font-semibold", isDone(w) && "text-muted-foreground")}>
                       {w.title}
                       <span className="text-muted-foreground block text-xs font-semibold">
-                        {PRIORITY_LABEL[w.priority].toLowerCase()}
-                        {role === "friend" && isTaken(w) && " · забронировано"}
-                        {w.multi && " · можно несколько"}
+                        {isDone(w) ? (
+                          `${w.done!.toLowerCase()}, уже не нужно`
+                        ) : (
+                          <>
+                            {PRIORITY_LABEL[w.priority].toLowerCase()}
+                            {role === "friend" && isTaken(w) && " · забронировано"}
+                            {w.multi && " · можно несколько"}
+                          </>
+                        )}
                       </span>
                     </span>
-                    <span className="text-sm font-extrabold whitespace-nowrap tabular-nums">{formatPrice(w.price, w.currency)}</span>
+                    <span className={cn("text-sm font-extrabold whitespace-nowrap tabular-nums", isDone(w) && "text-muted-foreground", isDone(w) && w.price !== null && "line-through")}>
+                      {formatPrice(w.price, w.currency)}
+                    </span>
                   </button>
                 </li>
               ))}

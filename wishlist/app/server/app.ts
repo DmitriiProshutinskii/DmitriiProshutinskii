@@ -264,6 +264,15 @@ export function createApp(cfg: Config) {
     return c.json(ownerView(store.data))
   })
 
+  app.put("/api/owner/wishes/:id/done", owner, smallBody, async (c) => {
+    const b = await json(c)
+    const done = b.done === null || b.done === undefined ? null : str(b.done, 40, "done", true)
+    await store.mutate((db) => {
+      findWish(db, c.req.param("id")).done = done
+    })
+    return c.json(ownerView(store.data))
+  })
+
   app.delete("/api/owner/wishes/:id", owner, async (c) => {
     const photo = await store.mutate((db) => {
       const w = findWish(db, c.req.param("id"))
@@ -358,6 +367,7 @@ export function createApp(cfg: Config) {
     const clientId = c.get("clientId")
     await store.mutate((db) => {
       const w = findWish(db, c.req.param("id"))
+      if (w.done) throw new HttpError(409, "already_done")
       if (!w.multi && w.reservations.length) throw new HttpError(409, "already_taken")
       if (w.reservations.some((r) => r.clientId === clientId)) throw new HttpError(409, "already_yours")
       if (w.reservations.length >= 50) throw new HttpError(422, "too_many")

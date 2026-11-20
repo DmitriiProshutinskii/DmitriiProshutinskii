@@ -14,7 +14,7 @@ import { WishForm } from "@/components/wish/wish-form"
 import { AddWishTile, WishTile } from "@/components/wish/wish-tile"
 import type { useWishlist } from "@/hooks/use-wishlist"
 import { storage, type Backend } from "@/lib/backend"
-import { byPriority, isTaken, plural } from "@/lib/format"
+import { byPriority, isDone, isTaken, plural } from "@/lib/format"
 import type { Role } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -63,7 +63,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
   const themes = view?.themes ?? []
   const visible = useMemo(() => {
     let l = wishes
-    if (filter === "hot") l = l.filter((w) => w.priority === 3)
+    if (filter === "hot") l = l.filter((w) => w.priority === 3 && !isDone(w))
     else if (filter === "multi") l = l.filter((w) => w.multi)
     else if (filter === "mine") l = l.filter((w) => w.reservations.some((r) => r.mine))
     else if (filter.startsWith("th:")) l = l.filter((w) => w.themeIds.includes(filter.slice(3)))
@@ -92,10 +92,13 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
 
   const friendLink = view.friendPath ? location.origin + view.friendPath : ""
   const owner = view.ownerName
-  const free = wishes.filter((w) => !isTaken(w)).length
+  // Wishes marked «Купил», «Починил» stay on the page, greyed out, but don't count as open ones.
+  const active = wishes.filter((w) => !isDone(w))
+  const doneCount = wishes.length - active.length
+  const free = active.filter((w) => !isTaken(w)).length
   const filters: { value: string; label: string; count: number; dot?: boolean; check?: boolean }[] = [
     { value: "all", label: "Все", count: wishes.length },
-    { value: "hot", label: "Очень хочу", count: wishes.filter((w) => w.priority === 3).length, dot: true },
+    { value: "hot", label: "Очень хочу", count: active.filter((w) => w.priority === 3).length, dot: true },
     { value: "multi", label: "Можно несколько", count: wishes.filter((w) => w.multi).length },
     ...(friend ? [{ value: "mine", label: "Мои брони", count: wishes.filter((w) => w.reservations.some((r) => r.mine)).length, check: true }] : []),
     ...themes.map((t) => ({ value: "th:" + t.id, label: t.name, count: wishes.filter((w) => w.themeIds.includes(t.id)).length })),
@@ -130,6 +133,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
           onDelete={async () => {
             if (await run((b) => b.deleteWish(wish.id), "Желание удалено")) close()
           }}
+          onSetDone={(done) => run((b) => b.setDone(wish.id, done), done ? "Отмечено. Друзья увидят его серым" : "Желание снова в списке")}
         />
       )
     }
@@ -291,7 +295,9 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
             <h2 className="font-display text-lg font-medium tracking-tight">Желания</h2>
             {wishes.length > 0 && (
               <p className="text-muted-foreground text-sm tabular-nums">
-                {friend ? `Свободно ${free} из ${wishes.length}` : `${wishes.length} ${plural(wishes.length, "желание", "желания", "желаний")}`}
+                {friend
+                  ? `Свободно ${free} из ${active.length}`
+                  : `${active.length} ${plural(active.length, "желание", "желания", "желаний")}${doneCount ? ` · ${doneCount} уже не ${doneCount === 1 ? "нужно" : "нужны"}` : ""}`}
               </p>
             )}
           </div>
@@ -332,7 +338,7 @@ export function WishlistPage({ role, backend, list, topBar, footer, onLogout }: 
                   key={t.id}
                   theme={t}
                   role={role}
-                  ideas={wishes.filter((w) => w.themeIds.includes(t.id)).length}
+                  ideas={active.filter((w) => w.themeIds.includes(t.id)).length}
                   onOpen={() => open({ type: "theme", id: t.id })}
                 />
               ))}

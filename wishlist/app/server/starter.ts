@@ -41,6 +41,7 @@ export function starterDb(base: Db): { db: Db; photos: PhotoJob[] } {
         note: w.note,
         photo: null,
         illustration: "illustration" in w ? w.illustration : null,
+        done: "done" in w ? w.done : null,
         createdAt: now,
         reservations: [],
       }

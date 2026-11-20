@@ -44,4 +44,26 @@ export const illustrations: Record<string, string> = {
       `<path d="M38 36C38 25 48 21 60 27C72 21 82 25 82 36C82 48 78 56 76 68C74 80 72 94 66 94C61 94 62 74 60 74C58 74 59 94 54 94C48 94 46 80 44 68C42 56 38 48 38 36Z" fill="#ffffff" stroke="#9aa3b2" stroke-width="3" stroke-linejoin="round"/>` +
       `<rect x="20" y="55" width="80" height="4" rx="2" fill="#3b82f6" opacity=".85"/>`
   ),
+  // Densitometry: a person lying on the scanner table under the scanning arm.
+  scan: svg(
+    `<path d="M100 88V34H58" fill="none" stroke="#9aa3b2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>` +
+      `<rect x="48" y="30" width="26" height="12" rx="3" fill="#6b7280"/>` +
+      `<path d="M52 42H70L80 72H42Z" fill="#3b82f6" opacity=".22"/>` +
+      `<circle cx="30" cy="66" r="8" fill="#e9b88f"/>` +
+      `<rect x="40" y="60" width="54" height="14" rx="7" fill="#5b8def"/>` +
+      `<rect x="14" y="74" width="92" height="8" rx="3" fill="#d4d8e0"/>` +
+      `<path d="M24 82V98M96 82V98" stroke="#9aa3b2" stroke-width="5" stroke-linecap="round"/>` +
+      `<rect x="40" y="70" width="42" height="3" rx="1.5" fill="#3b82f6"/>`
+  ),
+  // Massage gift certificate: a card with a ribbon and a stack of spa stones.
+  certificate: svg(
+    `<rect x="12" y="28" width="84" height="56" rx="7" fill="#f6ead9" stroke="#d9c2a3" stroke-width="2"/>` +
+      `<rect x="34" y="28" width="9" height="56" fill="#d9534f"/><rect x="12" y="51" width="84" height="9" fill="#d9534f"/>` +
+      `<path d="M38 55C30 44 22 48 26 54C29 58 34 57 38 55ZM39 55C47 44 55 48 51 54C48 58 43 57 39 55Z" fill="#b83b38"/>` +
+      `<rect x="54" y="36" width="32" height="5" rx="2.5" fill="#c8ad8a"/><rect x="54" y="68" width="24" height="5" rx="2.5" fill="#c8ad8a"/>` +
+      `<ellipse cx="88" cy="102" rx="22" ry="7" fill="#4b5563"/>` +
+      `<ellipse cx="88" cy="91" rx="16" ry="6" fill="#6b7280"/>` +
+      `<ellipse cx="88" cy="81" rx="10" ry="4.5" fill="#9ca3af"/>` +
+      `<path d="M88 77C86 68 92 62 100 62C100 70 95 76 88 77Z" fill="#5fa86b"/>`
+  ),
 }

@@ -31,6 +31,8 @@ export interface StarterWish {
   photoUrl?: string
   /** Drawing from src/lib/illustrations.ts for wishes with no product photo (services). */
   illustration?: string
+  /** Already sorted out, with the reason shown on the greyed-out card: «Купил», «Починил». */
+  done?: string
 }
 
 export const starter = {
@@ -70,8 +72,9 @@ export const starter = {
       priority: 3,
       multi: false,
       themes: ["kart"],
-      note: "Под мой руль Fanatec GT DD Pro, хочу в ближайшие дни. В Европе рама стоит €249,95, кресло — от €79,95 (без доставки). В России цен не нашёл, ориентир 30–45 тыс. ₽.",
+      note: "Починил, пока покупать не нужно. Если понадобится: под руль Fanatec GT DD Pro, в Европе рама стоит €249,95, кресло — от €79,95 (без доставки). В России цен не нашёл, ориентир 30–45 тыс. ₽.",
       photoUrl: "https://cdn.shopify.com/s/files/1/0696/8423/2344/files/CRD-9010009-WW-04.png",
+      done: "Починил",
     },
     {
       key: "dental-ct",
@@ -88,12 +91,13 @@ export const starter = {
       key: "gta6",
       title: "GTA 6",
       url: "https://store.playstation.com/pl-pl/concept/10000730",
-      price: 7678,
+      price: 16055,
       priority: 2,
       multi: false,
       themes: ["games"],
-      note: "Хочу в день релиза, 19 ноября. В PS Store и Xbox — 349 zł, издание Ultimate — 429 zł. Игра только для PS5 и Xbox, на ПК её нет.",
+      note: "Купил 18.11: карта пополнения PS Store (Польша) на Яндекс Маркете, вышло 16 055 ₽. Игра только для PS5 и Xbox, на ПК её нет.",
       photoUrl: "https://image.api.playstation.com/vulcan/ap/rnd/202606/1818/9f51f0ccdb65bd29c36a0907a738c2902a712f03e2fd6470.png?w=1024",
+      done: "Купил",
     },
     {
       key: "genutrain",
@@ -105,6 +109,28 @@ export const starter = {
       themes: [],
       note: "Размер 4, стандартная ширина. В «Ортеке» можно оплатить «Сплитом»: 4 × 3 873 ₽.",
       photoUrl: "https://www.bauerfeind.us/media/db/05/f4/1759849210/shopping-genutrain_knee-brace-titan_1920x1920.jpg",
+    },
+    {
+      key: "densitometry",
+      title: "Денситометрия: состав тела и подкожный жир",
+      url: "https://www.endocrincentr.ru/services/densitometriya",
+      price: null,
+      priority: 2,
+      multi: false,
+      themes: [],
+      note: "В НМИЦ эндокринологии. Цены на сайте нет, её называют по телефону +7 495 500-00-90.",
+      illustration: "scan",
+    },
+    {
+      key: "massage",
+      title: "Сертификат на массаж «Ляг спиной»",
+      url: "https://lyag.ru/certificate",
+      price: null,
+      priority: 2,
+      multi: true,
+      themes: [],
+      note: "Москва, общий массаж. Сертификат бывает на 1–20 сеансов или на сумму от 5 000 до 100 000 ₽, так что можно подарить вскладчину.",
+      illustration: "certificate",
     },
     {
       key: "coffee",

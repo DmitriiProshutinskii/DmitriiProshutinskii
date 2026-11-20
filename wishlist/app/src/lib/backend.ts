@@ -12,6 +12,7 @@ export class ApiError extends Error {
 const MESSAGES: Record<string, string> = {
   already_taken: "Кто-то уже успел это забронировать",
   already_yours: "Ты уже это бронировал",
+  already_done: "Это уже не нужно, бронировать не надо",
   wrong_password: "Неверный пароль",
   list_not_found: "Ссылка устарела. Попроси новую у владельца списка",
   too_large: "Файл слишком большой, нужен до 6 МБ",
@@ -29,6 +30,8 @@ export interface Backend {
   addWish(input: WishInput): Promise<WishlistView>
   updateWish(id: string, input: WishInput): Promise<WishlistView>
   deleteWish(id: string): Promise<WishlistView>
+  /** Marks a wish as no longer needed with a short reason, or puts it back on the list with null. */
+  setDone(id: string, done: string | null): Promise<WishlistView>
   addTheme(input: ThemeInput): Promise<WishlistView>
   deleteTheme(id: string): Promise<WishlistView>
   saveSettings(settings: Settings): Promise<WishlistView>
@@ -97,6 +100,7 @@ export class OwnerApi implements Backend {
   addWish = (input: WishInput) => request<WishlistView>("POST", "/api/owner/wishes", input)
   updateWish = (id: string, input: WishInput) => request<WishlistView>("PUT", `/api/owner/wishes/${id}`, input)
   deleteWish = (id: string) => request<WishlistView>("DELETE", `/api/owner/wishes/${id}`)
+  setDone = (id: string, done: string | null) => request<WishlistView>("PUT", `/api/owner/wishes/${id}/done`, { done })
   addTheme = (input: ThemeInput) => request<WishlistView>("POST", "/api/owner/themes", input)
   deleteTheme = (id: string) => request<WishlistView>("DELETE", `/api/owner/themes/${id}`)
   saveSettings = (s: Settings) => request<WishlistView>("PUT", "/api/owner/settings", s)
@@ -130,6 +134,7 @@ export class FriendApi implements Backend {
   addWish = unsupported
   updateWish = unsupported
   deleteWish = unsupported
+  setDone = unsupported
   addTheme = unsupported
   deleteTheme = unsupported
   saveSettings = unsupported

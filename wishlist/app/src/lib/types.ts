@@ -28,6 +28,11 @@ export interface Wish {
   photo: string | null
   /** Placeholder drawing used by the demo data. */
   illustration?: string | null
+  /**
+   * Set when the wish is no longer needed, with the owner's short reason: «Купил», «Починил», «Подарили».
+   * Such wishes stay on the list, greyed out, and can't be reserved.
+   */
+  done?: string | null
   /** Friend view only. The owner's API never returns reservations. */
   reservations: Reservation[]
 }
