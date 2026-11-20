@@ -93,7 +93,7 @@ export function WishDetails({ wish, themes, role, ownerName, myName, onOpenTheme
       </div>
 
       {wish.note && (
-        <div className="bg-muted rounded-2xl p-4 text-sm break-words">
+        <div className="bg-muted rounded-2xl p-4 text-sm break-words whitespace-pre-line">
           <div className="text-muted-foreground mb-0.5 text-[11px] font-bold tracking-wider uppercase">
             {role === "friend" ? (ownerName ? `${ownerName} пишет` : "Комментарий") : "Твой комментарий"}
           </div>

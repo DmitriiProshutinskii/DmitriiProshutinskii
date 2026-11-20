@@ -39,7 +39,7 @@
   --th-brown-soft: oklch(0.94 0.02 60);
   --th-blue: oklch(0.52 0.18 265);
   --th-blue-soft: oklch(0.94 0.03 265);
-  --th-green: oklch(0.55 0.12 155);
+  --th-green: oklch(0.47 0.12 155);
   --th-green-soft: oklch(0.94 0.04 155);
 
   /* default accent for avatars etc. outside a theme context */

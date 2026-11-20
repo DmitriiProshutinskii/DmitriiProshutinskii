@@ -55,6 +55,17 @@ export const illustrations: Record<string, string> = {
       `<path d="M24 82V98M96 82V98" stroke="#9aa3b2" stroke-width="5" stroke-linecap="round"/>` +
       `<rect x="40" y="70" width="42" height="3" rx="1.5" fill="#3b82f6"/>`
   ),
+  // Body composition analyser (InBody): a platform with a column, hand grips and a screen.
+  inbody: svg(
+    `<rect x="30" y="92" width="60" height="12" rx="4" fill="#6b7280"/>` +
+      `<path d="M42 92H78" stroke="#c9ced8" stroke-width="3" stroke-linecap="round"/>` +
+      `<rect x="54" y="38" width="12" height="56" rx="3" fill="#9aa3b2"/>` +
+      `<rect x="40" y="18" width="40" height="26" rx="4" fill="#3a3f47"/>` +
+      `<rect x="44" y="22" width="32" height="18" rx="2" fill="#5b8def"/>` +
+      `<path d="M48 35V30M54 35V27M60 35V32M66 35V25M72 35V29" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>` +
+      `<path d="M38 50C30 50 26 56 26 62M82 50C90 50 94 56 94 62" fill="none" stroke="#3a3f47" stroke-width="4" stroke-linecap="round"/>` +
+      `<rect x="20" y="60" width="12" height="16" rx="4" fill="#3a3f47"/><rect x="88" y="60" width="12" height="16" rx="4" fill="#3a3f47"/>`
+  ),
   // Massage gift certificate: a card with a ribbon and a stack of spa stones.
   certificate: svg(
     `<rect x="12" y="28" width="84" height="56" rx="7" fill="#f6ead9" stroke="#d9c2a3" stroke-width="2"/>` +
